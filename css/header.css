@@ -1,0 +1,33 @@
+body{
+    background:rgb(245, 241, 234);
+}
+.row{
+	  background-color: #428bca;
+}
+
+.AMS{
+	font-size:20px;
+	font-weight:bold;
+	 font-family: sans-serif;
+	 color: aliceblue;
+}
+.AMS1{
+	font-size:25px;
+	font-weight:bold;
+	 font-family: sans-serif;
+	 color: bisque;
+}
+.AMS3{
+	font-size:15px;
+	font-weight:bold;
+	font-style: italic;
+	color: darkturquoise;
+}
+.datime{
+	font-size:12px;
+	font-weight:bold;
+	margin-top: 5px;
+}
+a{	
+	color:white;
+}
