@@ -1,0 +1,302 @@
+
+	<div class="panel panel-primary" ng-hide="hidepanel" >		
+		<ul class="breadcrumb" style="margin:0px">
+			<li><a href="/#/JobDescription"> Home</a></li>
+			<li><a href="">JobDescription</a></li>
+			<li class="active">Search</li>
+			<button type="button" class="btn btn-primary col-sm-offset-7" name="Search" ng-click="SearchJobDesc()" >
+			<span class="glyphicon glyphicon-search"><strong> Search</strong></span></button>
+			<a href=""> 
+				<button type="button"  class="btn btn-primary" name="add" ng-click="AddCandiInfo()">
+				<span class="glyphicon glyphicon-plus"><strong> Add</strong></span></button>
+			</a>
+	</ul>
+	</div>	
+<!------------------- Search Page	---------------- -->
+
+	<div class="panel panel-primary" ng-show="Searchjd">		
+		<ul class="breadcrumb" style="margin:0px">
+			<li><a href="/#/JobDescription"> Home</a></li>
+			<li><a href="">JobDescription</a></li>
+			<li class="active">Search</li>
+			<button type="button" class="btn btn-primary col-sm-offset-7" name="Search" ng-click="SearchCandidate()" >
+			<span class="glyphicon glyphicon-search"><strong> Search</strong></span></button>
+			<a href=""> 
+				<button type="button"  class="btn btn-primary" name="add" ng-click="AddCandiInfo()">
+				<span class="glyphicon glyphicon-plus"><strong> Add</strong></span></button>
+			</a>
+	</ul>	
+		<div class="panel-body">
+		<form  class="form-horizontal" role="form" name = "SearchForm" method="POST"  enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="Fullname" class="control-label col-md-3" >Requester Id:</label>
+				<div class="col-md-3">
+					<input type="text" class="form-control col-md-3" placeholder="Enter Id">
+				</div>
+				<label for="Fullname" class="control-label col-md-2"> Qualification:</label>
+				<div class="col-md-3">
+					<select class="form-control" ng-model="add.QualiName"
+					ng-options="Quali.QualiName for Quali in Qualification"
+					 multiple>							
+							<option value="">Please Select qualification</option>									
+					</select>
+				</div>
+			</div>
+					
+			<div class="form-group">
+				<label for="Skill" class="control-label col-md-3">Skill:</label>
+				<div class="col-md-3">
+					<select class="form-control" ng-model="add.SkillName" 
+					ng-options="Skill.SkillName for Skill in Skill	"
+					 multiple>								
+						<option value="">Please Select Skill</option>									
+					</select>
+				</div>
+				<label for="Experience" class="control-label col-md-2">Experience:</label>
+				<div class="col-sm-3">
+					<div class="col-sm-6">
+						<input type="text" ng-model = "add.ExperianceMin" class="form-control" placeholder="min(mth)" >
+					</div>
+					
+					<div class="col-sm-6">	
+						<input type="text"  ng-model = "add.ExperianceMAx" class="form-control" placeholder="max(mth)">
+					</div>
+					
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<button type="submit" class="col-sm-offset-9 btn btn-success glyphicon glyphicon-circle-arrow-right" 
+				ng-click="LoadSearchJd(add)" name="go" ><b> Go </b></button>
+				<button type="reset" class=" btn btn-danger" name="clear"><b> Clear </b></button>
+			</div>	
+			</form>	
+		</div>
+	</div>		
+
+<!---------------------- Show SearchTable -------------------------->	
+<div class="panel panel-primary" ng-show="hidetbl" >		
+		<ul class="breadcrumb" style="margin:0px">
+			<li><a href="#"> Home</a></li>
+			<li><a href="">JobDescription</a></li>
+			<li class="active">List</li>
+			<button type="button" class="btn btn-primary col-sm-offset-7" name="Search" ng-click="SearchJobDesc()" >
+			<span class="glyphicon glyphicon-search"><strong> Search</strong></span></button>
+			<a href=""> 
+				<button type="button"  class="btn btn-primary" name="add" ng-click="AddCandiInfo()">
+				<span class="glyphicon glyphicon-plus"><strong> Add</strong></span></button>
+			</a>
+	</ul>
+				
+		<div class="panel-body scroll">
+			<table class="table table-bordered" id = "ordertbl">
+				<tr>
+					<th class="text-center">Position</th>
+					<th class="text-center">ExperienceMin</th>
+					<th class="text-center">ExperienceMax</th>
+					<th class="text-center">Qualification</th>
+					<th class="text-center">Skill</th>
+					<th class="text-center">Role</th>
+					<th class="text-center">Resposibility</th>
+				</tr>				
+				<tr>
+				<tr ng-repeat="obj in tbldata">
+					<td class="text-center">{{obj.Position}}</td>
+					<td class="text-center">{{obj.ExperianceMin}}</td>
+					<td class="text-center">{{obj.ExperianceMAx}}</td>
+					<td class="text-center">{{obj.QualiName}}</td>
+					<td class="text-center">{{obj.SkillName}}</td>
+					<td class="text-center">{{obj.Role}}</td>
+					<td class="text-center">{{obj.Responsibility}}</td>
+				</tr>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!---------------------- Search JobDescription-------------------------->	
+<div class="panel panel-primary" ng-show="hideinfotbl">		
+		<ul class="breadcrumb" style="margin:0px">
+			<li><a href="#"> Home</a></li>
+			<li><a href="">JobDescription</a></li>
+			<li class="active">List</li>
+			<button type="button" class="btn btn-primary col-sm-offset-7" name="Search" ng-click="SearchJobDesc()" >
+			<span class="glyphicon glyphicon-search"><strong> Search</strong></span></button>
+			<a href=""> 
+				<button type="button"  class="btn btn-primary" name="add" ng-click="AddCandiInfo();">
+				<span class="glyphicon glyphicon-plus"><strong> Add</strong></span></button>
+			</a>
+	</ul>
+				
+		<div class="panel-body scroll"  >
+			<table class="table table-bordered" >
+				<tr>
+					<th class="text-center">Position</th>
+					<th class="text-center">ExperienceMin</th>
+					<th class="text-center">ExperienceMax</th>
+					<th class="text-center">Qualification</th>
+					<th class="text-center">Skill</th>
+					<th class="text-center">Role</th>
+					<th class="text-center">Resposibility</th>
+				</tr>
+				<tr ng-repeat="obj in Arrtbldata">
+					<td class="text-center"><a href ng-click="showone()">{{obj.Position}}</a></td>
+					<td class="text-center">{{obj.ExperianceMin}}</td>
+					<td class="text-center">{{obj.ExperianceMAx}}</td>
+					<td class="text-center">
+						<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+							{{ $index !=0 ? ' , '+ quali : quali }}
+						</span> 
+					</td>
+					<td class="text-center">
+						<span name="SkillName" ng-repeat="skill in obj.TechSkillArr">
+						{{ $index !=0 ? ' , '+ skill : skill }}
+						</span> 
+					</td>
+					<td class="text-center">{{obj.Role}}</td>
+					<td class="text-center">{{obj.Responsibility}}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+<!------------- Add JobDescription ----------------------->
+
+<div class="panel panel-primary" ng-show = "ShowcandiInfo">
+	<form  action="#" class="form-horizontal" role="form" name = "CandijdReForm" method="POST">	
+		<ul class="breadcrumb" style = "margin-bottom:0;">
+			<li><a href="#" >Home</a></li>
+			<li><a href="#">JobDescription</a></li>
+			<li class="active">Add</li>
+				<button type="button" class="btn btn-success col-sm-offset-7" ng-click="AddJobDesc(add);" ng-disabled="CandijdReForm.$invalid">
+				<span class="glyphicon glyphicon-ok"> <strong>Save</strong></span></button>
+			<button type="Reset" class="btn btn-danger">
+			<span class="glyphicon glyphicon-remove"><strong> Cancel</strong></span></button>	
+		</ul>
+	<div class="panel-body scroll">			
+		<div class="form-group">
+			<div class = "col-sm-12">
+				<label for="position" class="control-label col-sm-2">Position:</label>
+				<div class="col-sm-3">
+					<select class="form-control" ng-model="add.Position"
+					ng-options="position.Position for position in PositioName " required>							
+						<option value="">Please Select Position</option>							
+					</select>					
+				</div>
+				<label for="Experience" class="control-label col-sm-2">Experience:</label>
+				<div class="col-sm-3">
+					<div class="col-sm-6">
+						<input type="text"  class="form-control" ng-model = "add.ExperianceMin" placeholder="min(mth)" required >
+						<span style="color:red">{{ ExpMinValid }}</span>
+					</div>
+					
+					<div class="col-sm-6">	
+						<input type="text"   class="form-control" ng-model = "add.ExperianceMAx" placeholder="max(mth)" required>				
+						<span style="color:red">{{ ExpMaxValid }}</span>
+					</div>				
+				</div>
+			</div>
+		</div>
+		
+		<hr class="hr">
+		<label for="Qualification & Skill" class="control-label"><u>Qualification & Skill</u></label>
+		<div class="form-group">
+			<label for="Qualification" class="control-label col-sm-2">Qualification:</label>
+				<div class="col-sm-3">
+					<select class="form-control"  ng-model="add.QualiName"
+					ng-options="Quali.QualiName for Quali in Qualification "
+					 multiple required>						
+							<option value="">Please Select qualification</option> 							
+					</select>					
+				</div>
+			<label for="Skill" class="control-label col-sm-2">Skill:</label>
+				<div class="col-sm-3">
+					<select class="form-control" ng-model="add.SkillName" 
+					ng-options="Skill.SkillName for Skill in Skill 	"
+					multiple required>					
+							<option value="">Please Select Skill</option>														
+					</select>				
+				</div>	
+		</div>	
+		<hr class="hr">
+		<label for="Role & Responsibility" class="control-label"><u>Role & Responsibility</u></label>
+		<div class="form-group">
+			<label for="Role" class="control-label col-sm-2">Role:</label>
+			<div>
+				<textarea class="col-sm-3"  ng-model="add.Role" required></textarea>						
+			</div>			
+			<label for="Address" class="control-label col-sm-2">Responsibility:</label>
+			<div>
+				<textarea class="col-sm-3"   ng-model="add.Responsibility" required> </textarea>				
+			</div>			
+		</div>
+	</div>
+	</div>
+	</form>
+</div>
+
+<!----------------------- JobDescription View ------------------------>
+
+
+	<div class="panel panel-primary" ng-show = "CandiView">
+		<ul class="breadcrumb" style = "margin-bottom:0;">
+			<li class="new"><a href="#" ng-click='showpanel'>Home</a></li>
+			<li><a href="#">JobDescription</a></li>
+			<li class="active">View</li>
+			
+			<button type="submit" class="col-xs-offset-8 btn btn-primary" ng-click="AddCandiInfo()">
+			<span class="glyphicon glyphicon-edit"><strong> Edit</strong></span></button>
+			
+			<button type="submit" class="btn btn-primary" name="Cancel"><span class="glyphicon glyphicon-circle-arrow-left"><strong> Back</strong></span></button>
+			
+		</ul>
+		<div class="panel-body scroll " style = "font-size:12px;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="position" class="col-xs-2 text-right" >Position:</label>
+				<span class="col-xs-2">{{ add.Position.Position }}</span>
+			
+				<label for="experience" class="col-xs-1 text-right" ><u>Experiance</u></label>
+				<label for="experience" class="col-xs-1 text-right" >Min:{{add.ExperianceMin}}</label>		
+				<label for="experience" class="col-xs-1 text-right" >Max:{{add.ExperianceMAx}}</label>			
+			</div>
+			
+			<hr class="hr">
+			<div class="form-group">
+				<label for="qualification" class="col-xs-2 text-right" > <u>Qualification & Skill</u></label>
+			</div>			
+			<div class="form-group">
+				<label for="qualification" class="col-xs-2 text-right" >Qualification:</label>
+				<div class="col-xs-2">
+					<table border="1" id = "ordertbl" cellpadding="10px" style="border-collapse:collapse;">
+						<tr>
+						<th class="text-center col-xs-1">Qualification</th>
+						<th class="text-center col-xs-1">Skill</th>		
+						</tr>
+						<tr >		
+						<td class="text-center col-xs-1">{{addjd.QualiName}}</td>
+						<td class="text-center col-xs-1">{{addjd.SkillName}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+				
+			<hr class="hr">
+			<div class="form-group">
+				<label for="role" class="col-xs-2 text-right" ><u>Role & Responsibilty</u></label>
+			</div>
+			
+			<div class="form-group">
+				<label for="role" class="col-xs-2 text-right" >Role:</label>
+				<p class="col-xs-9">{{ add.Role }}</p>
+			</div>
+			
+			<div class="form-group">
+				<label for="responsibility" class="col-xs-2 text-right" >Responsibility:</label>
+				<span class="col-xs-10">{{ add.Responsibility }}</span>
+			</div>
+		</form>
+		</div>
+	</div>
+

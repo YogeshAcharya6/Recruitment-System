@@ -1,0 +1,473 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<!-- <script type="text/javascript">
+		$(function(){
+			$('*[name=date2]').appendDtpicker({"inline": true});
+		});
+	</script> -->
+ <script type="text/javascript">
+            $('#timepicker1').timepicker();
+            $('#timepicker2').timepicker();
+        </script>
+<div>
+<form novalidate name="RRSchedule" class="form-horizontal" role="form">
+			<div>
+				<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="RRScheduleBCrumb();">RR Schedule</a></li>
+				   </ul>
+				</div>
+			</div>	
+<!-- --------------------------------------------------------------------------------------------- -->
+			<div class="col-md-12">&nbsp;</div>
+			<div class="col-md-12" ng-show="myRRPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>My Recruitment Request</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-1">
+											Serial No.
+										</th>
+										<th style="border:none" class="col-md-1">Position Id</th>
+										<th style="border:none" class="col-md-2">Position</th>
+										<th style="border:none" class="col-md-1">Openings</th>
+										<th style="border:none" class="col-md-1">Req Date</th>
+										<th style="border:none" class="col-md-1">Exp Date</th>
+										<th style="border:none" class="col-md-2">Staus(Fill/Openings)</th>
+										<th style="border:none" class="col-md-2">Alerts</th>
+										<th style="border:none" class="col-md-1">Add Candidate</th>
+									</tr>				
+								</thead>						
+								<tbody>
+								<!-- IsActiveInteraction:"0" -->
+										<tr ng-repeat="obj in ArrActivePosDtls">
+										<td class="col-md-1">{{$index+1}}</td>
+										<td class="col-md-1">{{obj.idRR}}</td>
+										<td class="col-md-2"><a href="" ng-click="getPositionRelCandidate(obj);">{{obj.Position}}</a></td>
+										<td class="col-md-1">{{obj.Openings}}</td>
+										<td class="col-md-1">{{obj.RequestDate}}</td>
+										<td class="col-md-1">{{obj.ExpectedDate}}</td>
+										<td class="col-md-2">{{obj.Status}}&nbsp;&nbsp;<span>(</span><span ng-if="obj.Fill == null">{{0}}</span><span>{{obj.Fill}}</span>&nbsp;&nbsp;<span>/</span>&nbsp;&nbsp;{{obj.Openings}}<span>)</span></td>
+										<td class="col-md-2"><span ng-if="obj.rrScedule.length>0">Date:{{obj.rrScedule[0].intDate}},{{obj.rrScedule[0].altIntDate}}<br>
+															Interview Type : {{obj.rrScedule[0].interviewTypeDesc}}
+															<br>Interviewer : <span name = "skillName"  ng-repeat="Name in obj.rrScedule[0].NameArr">
+															{{ $index !=0 ? ' , '+ Name : Name }}
+															</span> 
+															<br><button class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#myModal11" ng-focus="#myModal" ng-click="getAllAlerts(obj);">Show More</button>
+															</span><span ng-if="obj.rrScedule.length == 0">--</span></td>
+										<td class="col-md-1"><button class="btn btn-default btn-xs" ng-click="getRRCandidateDtls(obj);">Assign Candidate</button></td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+						<div id="myModal11" class="modal fade" role="dialog">
+							<div class="modal-dialog" style="width: 94%;">
+							<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Recruitment Request Alerts</h4>
+									</div>
+									<div class="modal-body" style="height:400px;">
+										<div class="col-md-12">
+										
+										<div class="form-group col-md-6" style="margin-left:17%;">
+											<label for="inputEmail3" class="col-sm-4 control-label">Position</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" ng-model="AlertsPosition" id="inputEmail3" placeholder="Position" disabled>
+											</div>
+										</div>
+										
+										</div>
+										<br>
+										<br>
+										<br>
+										<div>
+											<scrollable-table>
+											<table class="table table-condensed table-striped table-responsive">
+												<thead>
+													<tr>
+														<th style="border:none" class="col-md-1">
+															Serial No.
+															
+														</th>
+														<th style="border:none" class="col-md-2">Interview Type</th>
+														<th style="border:none" class="col-md-2">Interaction Date</th>
+														<th style="border:none" class="col-md-3 ">Alternate Interaction Date</th>
+														<th style="border:none" class="col-md-2 ">Candidate Name</th>
+														<th style="border:none" class="col-md-2">Interviewer Name</th>
+													</tr>				
+												</thead>						
+												<tbody>
+														<tr ng-repeat="obj in alertsDtls.rrScedule" ng-class="obj.intDate1 == todate || obj.altIntDate1 == todate ? 'success':''">
+														<td >{{$index+1}}</td>
+														<td>{{obj.interviewTypeDesc}}</td>
+														<td><span ng-if="obj.intDate1 != todate">{{obj.intDate}}</span><span ng-if="obj.intDate1 == todate">{{obj.intDate}}<br>Remaining time&nbsp;:&nbsp;<span countdown='' date='{{obj.intDate}}'></span></span></td>
+														<td><span ng-if="obj.altIntDate1 != todate">{{obj.altIntDate}}</span><span ng-if="obj.altIntDate1 == todate">{{obj.altIntDate}}<br>Remaining time&nbsp;:&nbsp;<span countdown='' date='{{obj.altIntDate}}'></span></span></td>
+														<td>{{obj.CandidateName}}</td>
+														<td><span ng-repeat="Name in obj.NameArr">{{ $index !=0 ? ','+ Name : Name }}</span></td>
+													</tr>
+												</tbody>
+											</table>
+											</scrollable-table>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+<!-- ---------------------------------------------------------------------------------------- -->
+			<div class="col-md-12" ng-show="PositionDetailsPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Position Details</strong>
+							<button class="btn btn-default close" ng-click="cancelBtn();">&times;</button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right">{{errormessage}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Position</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" ng-model="Position" id="inputEmail3" placeholder="Position" disabled>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-2 control-label">Openings</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" ng-model="Openings" id="inputEmail3" placeholder="Openings" disabled>
+							</div>
+							<label for="inputEmail3" class="col-sm-2 control-label">Remaining</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" ng-model="remainingOpening" id="inputEmail3" disabled>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Requested By</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="inputEmail3" ng-model="Name" placeholder="Employee Name" disabled>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-2 control-label">Req Id</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" ng-model="EmpId" id="inputEmail3" placeholder="Emp Id" disabled>
+							</div>
+							<label for="inputEmail3" class="col-sm-2 control-label">Email Id</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" ng-model="EmailId" id="inputEmail3" placeholder="Email Id" disabled>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Priority</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="inputEmail3" placeholder="--" disabled>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-2 control-label">Req Date</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="inputEmail3" ng-model="RequestDate" placeholder="Requested date" disabled>
+							</div>
+							<label for="inputEmail3" class="col-sm-2 control-label">Exp Date</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="inputEmail3" ng-model="ExpectedDate" placeholder="Expected Date" disabled>
+							</div>
+						</div>
+					</div>
+					<!-- <hr class="col-md-12" style="padding-right: 0px;"> -->
+					<div class="col-md-12">
+						<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-1">
+											Serial No.
+											<!-- <a href=""><span ng-hide="hName==false" ng-click="hName=false;order('EmpId', true)">Requester Id &#9650;</span>
+												<span ng-show="hName==false" ng-click="hName=true;order('EmpId', false)">Requester Id &#9660;  </span></a>  -->
+										</th>
+										<th style="border:none" class="col-md-1">Status</th>
+										<th style="border:none" class="col-md-3">Candidate Name</th>
+										<th style="border:none" class="col-md-3 ">last Interaction</th>
+										<th style="border:none" class="col-md-2 ">Next Interaction</th>
+									</tr>				
+								</thead>						
+								<tbody>
+										<tr ng-repeat="obj in ArrPosRelCandidatesDtls">
+										<td class="col-md-1">{{$index+1}}</td>
+										<td class="col-md-1">{{obj.candiPosStatusDesc}}</td>
+										<td class="col-md-3 ">{{obj.CandidateName}}</td>
+										<td class="col-md-3 ">{{obj.RegDate}}</td>
+										<td class="col-md-2"><span ng-if="obj.IsActiveInteraction == null || obj.IsActiveInteraction == 0"><button class="btn btn-primary btn-xs" ng-click="PlanISBtn(obj);">Plan</button>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" ng-click="deactivateCandiRelPos(obj);">Close</button></span>
+															<span><span ng-if="obj.intDate">Date : {{obj.intDate}} , {{obj.altIntDate}}</span><br>
+															<span ng-if="obj.interviewTypeDesc">Interview Type : {{obj.interviewTypeDesc}}</span> 
+															<br><span ng-if="obj.NameArr[0]">Interviewer : 
+															<span name = "skillName"  ng-repeat="Name in obj.NameArr">
+															{{ $index !=0 ? ' , '+ Name : Name }}
+															</span> </span></span></td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+
+<!-- ---------------------------------------------------------------------------- -->		
+		<div class="col-md-10 col-md-offset-1" ng-show="InteractionSchedulepanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Interaction Schedule</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errormessage">{{errormessage}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Interview Type</label>
+							<div class="col-sm-8">
+								<select class = "form-control" ng-model="schedule.interviewTypeDesc"
+									ng-options="obj.interviewTypeDesc for obj in ArrInterviewTypeDtls" tabindex="1" required>
+									<option value = "">Select</option>
+								</select>
+								<!-- <input type="text" class="" id="inputEmail3" ng-model="schedule.InterviewType" placeholder="Interview Type" required tabindex="1"/> -->
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Interviewer</label>
+							<div class="col-sm-8">
+								<multi-select   
+									output-model="schedule.Name" 
+									input-model="ArrEmployeeDtls"    
+									button-label="Name"
+									helper-elements=""
+									item-label="Name"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="2"
+									required>
+								</multi-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Interaction Date</label>
+							<div class="col-sm-8 input-group" style="padding-left: 14px;padding-right: 13px;">
+								<!-- <input type="text" class="form-control" datepicker-popup 
+									ng-model="schedule.InteractionDate" is-open="opened2"  datepicker-options="dateOptions" 
+									close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open2($event)" tabindex="3"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	 -->
+											<input type="text" ng-model="schedule.InteractionDate" name="date3" value="" class="col-md-12">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=date3]').appendDtpicker({
+					
+				});
+			});
+		</script>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Alternate Date</label>
+							<div class="col-sm-8 input-group" style="padding-left: 14px;padding-right: 0px;">
+								<!-- <input type="text" class="form-control" datepicker-popup 
+									ng-model="schedule.AInteractionDate" is-open="opened"  datepicker-options="dateOptions" 
+									required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open1($event)" tabindex="4"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	 -->
+								<input type="text" ng-model="schedule.AInteractionDate" name="date4" value="" class="col-md-12">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=date4]').appendDtpicker({
+					
+				});
+			});
+		</script>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-7">
+						<div class="form-group pull-right">
+							<button class="btn btn-primary" ng-click="saveRRSchedule(schedule);" ng-disabled="RRSchedule.$invalid">Save</button>
+							<button class="btn btn-default" ng-click="cancelISBtn();">Cancel</button>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+<!-- ------------------------------------------------------------------------- -->
+			<div class="col-md-12" ng-show="AddRRCandidatePanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Assign Recruitment Request Candidate</strong>
+							<button class="btn btn-default close" ng-click="cancelBtn();">&times;</button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errorMsg">{{errorMsg}}</span>
+							<span class="label label-success pull-right" ng-show="insermsg">{{insermsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Position</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" ng-model="PositionName" id="inputEmail3" placeholder="Position" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group col-md-8" style="margin-top: 1.2%;">
+								<span class="col-sm-2"><a href="" ng-mouseover="getRoleHtml(Role);" ng-mouseleave="leaveRoleHtml();"><label>Role...</label></a></span><span class="col-sm-4"><a href="" ng-mouseover="getRoleHtml(Responsibility);" ng-mouseleave="leaveRoleHtml();"><label>Responsibility...</label></a></span></span><span class="col-sm-2"><button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal2,#myModal3" ng-focus="#myModal" ng-click="getModalData(Role,Responsibility);">Show</button></span>
+							</div>
+							<div class="col-md-4" style="padding-right:0px;">
+								<button class="btn btn-primary pull-right" ng-click="goAddcadidateForm();">Add Candidate</button>
+							</div>
+						</div>
+					<div>
+					<div class="col-md-12">
+				<div>
+					<scrollable-table>
+						<table class="table table-striped table-condensed">
+							<thead>
+								<tr>
+									<th style="border:none" class="col-md-1">
+									<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('CandidateName', true)">Name &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('CandidateName', false)">Name &#9660;  </span></a> 
+									</th>
+									<th style="border:none" class="col-md-1">Qualification</th>
+									<th style="border:none" class="col-md-1">TechSkill</th>
+									<th style="border:none" class="col-md-1">Total Exp(m)</th>
+									<th style="border:none" class="col-md-1">Notice Per(m)</th>
+									<th style="border:none" class="col-md-2">Role & Responsibility</th>
+									<th style="border:none" class="col-md-1">Salary</th>
+									<th style="border:none" class="col-md-1">Designation</th>
+									<th style="border:none" class="col-md-1">Status</th>
+									<th style="border:none" class="col-md-1">
+										<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('RegDate', true)">Reg Date &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('RegDate', false)">Reg Date &#9660;  </span></a> 
+									</th>
+									<th style="border:none" class="col-md-1">Assign</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat = "obj in ArrCandiSearch">
+									<td><a href ng-click ="candiview(obj)">{{obj.CandidateName}}</a></td>
+									<td>
+										<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+										{{ $index !=0 ? ' , '+ quali : quali }}
+										</span><br>
+										<span style="color:green;">Match = {{obj.QualiMatch}}<span>%</span></span>
+									</td>
+							
+									<td>
+										<span name = "skillName"  ng-repeat="skill in obj.TechSkillArr">
+										{{ $index !=0 ? ' , '+ skill : skill }}
+										</span><br>
+										<span style="color:green;">Match = {{obj.skillPercentage}}<span>%</span></span>
+									</td>
+									<td>{{obj.TotalExp}}<br><span style="color:green;">Match = {{obj.Expmatch}}<span>%</span></span></td>
+									<td>{{obj.NoticePeriod}}</td>
+									<td style="padding-right: 0px;"><a href="" ng-mouseover="getRoleHtml(obj.Role);" ng-mouseleave="leaveRoleHtml();"><label>Role...</label></a>&nbsp;<a href="" ng-mouseover="getRoleHtml(obj.Responsibility);" ng-mouseleave="leaveRoleHtml();"><label>Responsibility...</label></a><button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal2,#myModal3" ng-focus="#myModal" ng-click="getModalData(obj.Role,obj.Responsibility);">Show</button></td>
+									<div id="myModal2" class="modal fade" role="dialog">
+										<div class="modal-dialog" style="width: 94%;">
+										<!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">Candidate Role</h4>
+												</div>
+												<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+													<span ng-bind-html = "Role"></span>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="myModal3" class="modal fade" role="dialog" style="margin-top:318px;">
+										<div class="modal-dialog" style="width: 94%;">
+										<!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">Candidate Responsibility</h4>
+												</div>
+												<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+													<span ng-bind-html = "Responsibility"></span>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<td>{{obj.CurrentSalary}}</td>
+									<td>{{obj.CurrentDesignation}}</td>
+									<td>{{obj.candidateStatusDesc}}</td>
+									<td>{{obj.RegDate | date : 'dd-MM-yyyy'}}</td>
+									<td><input type="checkbox" ng-model="obj.RRCandiActive"></td>
+								</tr>
+							</tbody>
+						</table>
+					</scrollable-table>
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-offset-5 col-md-2">
+					<div class="form-group">
+						<button class="btn btn-primary" ng-click="AddRRCandidate(ArrCandiSearch);">Save</button>
+						<button class="btn btn-default" ng-click="cancelBtn();">Cancel</button>
+					</div>
+				</div>
+				</div>
+				<div class="col-md-12" ng-show="RoleDiv" style="border-radius: 5px;margin-top:-29%;border:solid 3px solid;background-color:gray;width:70%;color:white;align:center;margin-left:15%;height:248px; max-height: 300px;overflow-y: scroll;">
+					<span ng-bind-html = "objRole"></span>
+				</div>
+				
+			</div>
+			
+				
+				</div>
+				</div>
+			</div>
+</form>

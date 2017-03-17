@@ -1,0 +1,250 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<div>
+<form novalidate name="RRSchedule" class="form-horizontal" role="form">
+			<div ng-if="flag != 1">
+				<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><span ng-if="flag == 1"><a href="" ng-click="getAlertsPanel();">Home</a></span><span ng-if="flag != 1"><a href="#/JobDescription">Home</a></span></li>
+						<li><a href="" ng-click="getAlertsPanel();">Alerts</a></li>
+						<button class="btn btn-primary pull-right btn-sm" ng-click="showfeedbacks();" ng-show="showFeedbackBtn" style="margin-top:-0.4%;">Show Feedback</button>
+						<button class="btn btn-primary pull-right btn-sm" ng-click="getAlertsPanel();" ng-show="AlertsBtn" style="margin-top:-0.4%;">Alerts</button>
+				   </ul>
+				</div>
+			</div>	
+<!-- --------------------------------------------------------------------------------------------- -->
+			<div class="col-md-12">&nbsp;</div>
+			<div class="col-md-12" ng-show="AlertsPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Alert List</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errmsg">{{errmsg}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-1">
+											Serial No.
+										</th>
+										<th style="border:none" class="col-md-1">Position</th>
+										<th style="border:none" class="col-md-2">Candidate Name</th>
+										<th style="border:none" class="col-md-1">Int Date</th>
+										<th style="border:none" class="col-md-1">Alt Int</th>
+										<th style="border:none" class="col-md-2">Interview Type</th>
+										<th style="border:none" class="col-md-2">Candidate Position Status</th>
+										<th style="border:none" class="col-md-2">Interviewer</th>
+									</tr>				
+								</thead>						
+								<tbody>
+								<!-- IsActiveInteraction:"0" -->
+										<tr ng-repeat="obj in ArrAlertsDtls" ng-class="obj.intDate1 == todate || obj.altIntDate1 == todate ? 'success':''">
+										<td class="col-md-1">{{$index+1}}</td>
+										<td class="col-md-1">{{obj.Position}}</td>
+										<td class="col-md-2">{{obj.CandidateName}}</td>
+										<td class="col-md-1"><span ng-if="obj.intDate1 != todate">{{obj.intDate}}</span><span ng-if="obj.intDate1 == todate">{{obj.intDate}}<br>Remaining time&nbsp;:&nbsp;<span countdown='' date='{{obj.intDate}}'></span></span></td>
+										<td class="col-md-1"><span ng-if="obj.altIntDate1 != todate">{{obj.altIntDate}}</span><span ng-if="obj.altIntDate1 == todate">{{obj.altIntDate}}<br>Remaining time&nbsp;:&nbsp;<span countdown='' date='{{obj.altIntDate}}'></span></span></td>
+										<td class="col-md-2">{{obj.interviewTypeDesc}}</td>
+										<td class="col-md-2">{{obj.candiPosStatusDesc}}</td>
+										<td class="col-md-2"><span ng-if="obj.Name != null">{{obj.Name}}</span><span ng-repeat="Name in obj.NameArr">{{ $index !=0 ? ' , '+ Name : Name }}</span></td>					
+										</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+						
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="col-md-12" ng-show="FeedbackPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Feedback</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errmsg">{{errmsg}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-1">
+											Serial No
+										</th>
+										<th style="border:none" class="col-md-2">
+											Position
+										</th>
+										<th style="border:none" class="col-md-2">
+											Candidate
+										</th>
+										<th style="border:none" class="col-md-1">
+											Date
+										</th>
+										<th style="border:none" class="col-md-2">Activity</th>
+										<th style="border:none" class="col-md-1">Actors</th>
+										<th style="border:none" class="col-md-1">Status</th>
+										<th style="border:none" class="col-md-2">Feedback</th>
+									</tr>				
+								</thead>						
+								<tbody>
+								<!-- IsActiveInteraction:"0" -->
+										<tr ng-repeat="obj in ArrFeedbackDtls">
+										<td class="col-md-1">{{$index+1}}</td>
+										<td class="col-md-2">{{obj.Position}}</td>
+										<td class="col-md-2">{{obj.CandidateName}}</td>
+										<td class="col-md-1">{{obj.LUDT}}</td>
+										<td class="col-md-2">{{obj.interviewTypeDesc}}</td>
+										<td class="col-md-1">{{obj.Name}}</td>
+										<td class="col-md-1">{{obj.interactionStatusDesc}}</td>
+										<td class="col-md-2"><a href="" ng-mouseover="getFeedbackHtml(obj.feedback);" ng-mouseleave="leaveFeedbackHtml();">Feedback...</a>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary btn-xs" ng-click="getFeedbackDtls(obj.feedback); getArrFeedbackIndex($index);" data-toggle="modal" data-target="#myModal1" ng-focus="#myModal" aria-hidden="false">Edit Feedback</button></td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+						<div class="col-md-12" ng-show="FeedbackDiv" style="border-radius: 5px;margin-top:-22%;border:solid 3px solid;background-color:gray;width:70%;color:white;align:center;margin-left:15%;height:248px; max-height: 300px;overflow-y: scroll;">
+							<span ng-bind-html = "showFeedback"></span>
+						</div>
+						<div id="myModal1" class="modal fade" role="dialog">
+							<div class="modal-dialog" style="width: 94%;">
+						<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Feedback</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container app">
+										<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll; name="htmlcontent" ng-model="Data" ta-disabled='disabled'></div>
+									</div>
+								</div>
+								<div class="modal-footer">
+										<button class="btn btn-default btn-primary" ng-click="shortListed();" ng-show="ShortListedBtn" >Short Listed</button>
+										<button class="btn btn-default btn-primary" ng-click="onHold();" ng-show="OnHoldBtn" >On Hold</button>
+										<button class="btn btn-default btn-primary" ng-click="rejected();" ng-show="RejectedBtn" >Rejected</button>
+										<button class="btn btn-default btn-primary" ng-click="updateCandiFeedback(Data);" ng-show="showfeedbackbtn">Save</button>
+										<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal" ng-click="RemoveData();">Close</button>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="col-md-12" ng-show="MoAlertsPanel" style="padding:0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Alert List</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errmsg">{{errmsg}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12" style="padding: 0px;">
+					<div class="container">
+						<div class="row">
+							<div id="no-more-tables" class="table-responsive">
+								<table class="col-md-12 table-bordered table-striped table-condensed cf" style="padding: 0px;">
+									<thead class="cf">
+										<tr style="font-size: 12px;">
+											<th>Position</th>
+											<th>Candidate Name</th>
+											<th>Int Date</th>
+											<th>Alt Int</th>
+											<th class="numeric">Interview Type</th>
+											<th class="numeric">Candi Pos Status</th>
+											<th class="numeric">Interviewer</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="obj in ArrAlertsDtls">
+											<td data-title="Position">{{obj.Position}}</td>
+											<td data-title="Candidate Name">{{obj.CandidateName}}</td>
+											<td data-title="Int Date">{{obj.intDate}}</td>
+											<td data-title="Alt Int">{{obj.altIntDate}}</td>
+											<td data-title="Interview Type" class="numeric">{{obj.interviewTypeDesc}}</td>
+											<td data-title="Candi Pos Status" class="numeric">{{obj.candiPosStatusDesc}}</td>
+											<td data-title="Interviewer" class="numeric"><span ng-if="obj.Name != null">{{obj.Name}}</span><span ng-repeat="Name in obj.NameArr">{{ $index !=0 ? ' , '+ Name : Name }}</span></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div id="myModal30" class="modal fade" role="dialog">
+				<div class="modal-dialog" style="width: 94%;">
+				<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Alerts</h4>
+						</div>
+						<div class="modal-body">
+							<div style="max-height: 50%;overflow-y: scroll";>
+								<div class="col-md-12">
+									<div class="form-group col-md-6 col-sm-6">
+										<label for="inputEmail3" class="col-sm-4 control-label">Position</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" ng-model="AlertsPosDtls" id="inputEmail3" placeholder="Position" disabled>
+										</div>
+									</div>
+									<div class="form-group col-md-6 col-sm-6">
+										<label for="inputEmail3" class="col-sm-4 control-label">Candidate</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" ng-model="AlertsCandiDtls" id="inputEmail3" placeholder="Candidate Name" disabled>
+										</div>
+									</div>
+								
+								</div>
+								<br>
+								<div id="no-more-tables" class="table-responsive">
+									<table class="col-md-12 table-bordered table-striped table-condensed cf">
+										<thead class="cf">
+											<tr>
+												<th>Int Date</th>
+												<th>Alt Int</th>
+												<th class="numeric">Interview Type</th>
+												<th class="numeric">Candidate Position Status</th>
+												<th class="numeric">Interviewer</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td data-title="Int Date">{{intDate}}</td>
+												<td data-title="Alt Int">{{altIntDate}}</td>
+												<td data-title="Interview Type" class="numeric">{{interviewTypeDesc}}</td>
+												<td data-title="Candidate Position Status" class="numeric">{{candiPosStatusDesc}}</td>
+												<td data-title="Interviewer" class="numeric"><span ng-if="Name != null">{{Name}}</span><span ng-repeat="Name in NameArr">{{ $index !=0 ? ' , '+ Name : Name }}</span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+</form>
+</div>

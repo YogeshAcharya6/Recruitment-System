@@ -1,0 +1,145 @@
+<form novalidate name="registerForm" method="POST" action="#" class="form-horizontal" role="form">
+			<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+			<div class="col-md-offset-1 col-md-10" ng-show="searchjobpanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Add Recruitment Request</strong>
+								<button type="Reset" class="btn btn-danger btn-sm pull-right" ng-click="clearJobDesc()" required tabindex="6">
+								<span class="glyphicon glyphicon-remove"><strong>Cancel</strong></span></button>
+								<button type="button" class="btn btn-success btn-sm pull-right" ng-click="searchJobDesc(searchjobDtls);" ng-disabled="CandijdReForm.$invalid" required tabindex="5">
+								<span class="glyphicon glyphicon-ok"><strong>Save</strong></span></button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+					</div>
+					<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div><div class="col-md-12">&nbsp;</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Requester" class="control-label col-md-4" >Requester Id:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model="RR.EmpId" class="form-control" placeholder="Enter Requester Id">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Department:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.DeptName"
+										 ng-options="Dept.DeptName for Dept in DepartmentListDtls"		
+											<option value="">Please Select Department</option>
+										</select>
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Job Details</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Position:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.DeptId"
+										 ng-options = "Dept.DeptName for Dept in Department ">			
+											<option value="">Please Select Department</option>
+									</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Job Openings:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model = "RR.EmpId" class="form-control" placeholder="Enter Requester Id">
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Date</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.DeptId"
+										 ng-options = "Dept.DeptName for Dept in Department ">			
+											<option value="">Please Select Department</option>
+									</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Expected Closure:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model = "RR.EmpId" class="form-control" placeholder="Enter Requester Id">
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Qualification & Skill</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Qualification:</label>
+									<div class="col-md-8">
+										
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Skill:</label>
+									<div class="col-md-8">
+										
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Experience & Salary</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Expected Salary(P.A):</label>
+									<div class="col-md-8">
+										<div class="col-md-6" style="padding-left:0px;">
+											<input type="text" ng-model = "RR.EmpId" class="form-control" placeholder="Enter Requester Id">
+										</div>
+										<div class="col-md-6" style="padding-right:0px;">
+											<input type="text" ng-model = "RR.EmpId" class="form-control" placeholder="Enter Requester Id">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Experience:</label>
+									<div class="col-md-8">
+										<label class="text-left col-md-2" style="margin-top:2%;">Min:</label>
+										<label class="text-left col-md-4" style="margin-top:2%;"></label>
+										<label class="text-left col-md-2" style="margin-top:2%;">Max:</label>
+										<label class="text-left col-md-4" style="margin-top:2%;"></label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request Status:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.DeptId"
+										 ng-options = "Dept.DeptName for Dept in Department ">			
+											<option value="">Please Select Status</option>
+									</select>
+									</div>
+								</div>
+							<hr class="col-md-12">
+							</div>
+							
+					</div>
+				</div>
+			</div>
+</form>
+<!-- Field	Type	Collation	Attributes	Null	Default	Extra	Action
+	idReg	int(11)			No	None	auto_increment	 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Name	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmpId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DeptId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DesignationId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	MobNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	AltContactNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmailId	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Address -->

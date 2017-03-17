@@ -1,0 +1,395 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<div>
+<form novalidate name="registerRR" class="form-horizontal" role="form">
+			<div>
+				<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="showRRlist();">Recruitment Request</a></li>
+						<li ng-show="RRSearch">Search</li>
+						<li ng-show="RRAdd">Add</li>
+						<li ng-show="RREdit">Edit</li>
+						<span class="pull-right">
+						<button type="button"  class="btn btn-primary btn-sm" style="margin-top: -4%;" ng-click="AddRRBtn()" ng-show="AddRecruitmentRequestBtn" name="add" ng-click="AddCandiInfo()">
+						<span class="glyphicon glyphicon-plus"><strong> Add</strong></span></button>
+						<button type="button"  class="btn btn-primary btn-sm" style="margin-top: -4%;" ng-show="RRSearchBtn" ng-click="SearchRRBtn()" name="add" ng-click="AddCandiInfo()">
+						<span class="glyphicon glyphicon-search"><strong>Search</strong></span></button>
+						</span>
+				   </ul>
+				</div>
+			</div>	
+			<div class="col-md-12">&nbsp;</div>
+			<div class="col-md-offset-1 col-md-10" ng-show="addRRPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Add Recruitment Request</strong>
+								<button type="buttton" class="btn btn-danger pull-right btn-sm" ng-click="cancelRRBtn();" tabindex="11">
+								Cancel</button>
+								<button type="button" class="btn btn-success pull-right btn-sm" ng-click="SaveRR(RR);" tabindex="10">
+								Save</button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px" style="margin-top: 1%;">
+							<span class="label label-warning pull-right" ng-show="error" style="margin-top: 1%;">{{error}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg" style="margin-top: 1%;">{{successmsg}}</span>
+					</div>
+					<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div><div class="col-md-12">&nbsp;</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Requester" class="control-label col-md-4" >Requester Id:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model="RR.EmpId" ng-blur="getEmpDept(RR)" class="form-control" placeholder="Enter Requester Id" required tabindex="1">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Department:</label>
+									<div class="col-md-8">
+										<select class = "form-control" ng-model="RR.Department"
+											ng-options="Dept.DeptName for Dept in DepartmentListDtls" tabindex="2" required>
+											<option value = "">Select Department</option>
+										</select>
+									</div> 
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Job Details</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Position:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.Position"
+										 ng-options = "Pos.Position for Pos in ArrJobDescPosDtls" ng-change="getJdRelPos(RR.Position);" required tabindex="3">			
+											<option value="">Select Position</option>
+									</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Job Openings:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model = "RR.Openings" class="form-control" placeholder="Job Openings" required tabindex="4">
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Date</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request:</label>
+									<div class="col-md-8">
+										<div class="form-group">
+											<div class="input-group" style="padding-right: 14px;padding-left: 16px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.RequestDate" is-open="opened2"  datepicker-options="dateOptions" 
+													close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open2($event)" tabindex="5"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										</div>	
+											<!-- <input type="text" ng-model ="RR.RequestDate" class="form-control " required tabindex="4"> -->
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Expected Closure:</label>
+									<div class="col-md-8">
+										<div class="form-group">
+											<div class="input-group" style="padding-right: 14px;padding-left: 16px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.ExpectedDate" is-open="opened"  datepicker-options="dateOptions" 
+													required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open1($event)" tabindex="6"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										</div>	
+										<!-- <input type="text" ng-model ="RR.ExpectedDate" class="form-control" required tabindex="5"> -->
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Qualification & Skill</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Qualification:</label>
+									<div class="col-md-8" style="margin-top:1.3%;">
+										<span name = "QualiName"  ng-repeat="quali in Qualification" >
+													{{ $index !=0 ? ' , '+ quali : quali }}
+										</span>	
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Skill:</label>
+									<div class="col-md-8" style="margin-top:1.3%;">
+										<span name="SkillName" ng-repeat="sk in Skill">
+											{{ $index !=0 ? ' , '+ sk : sk }}
+										</span> 
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Experience & Salary</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Expected Salary(P.A):</label>
+									<div class="col-md-8">
+										<div class="col-md-6" style="padding-left:0px;">
+											<input type="text" ng-model = "RR.minSalary" class="form-control" placeholder="min(P.A)" required tabindex="7">
+										</div>
+										<div class="col-md-6" style="padding-right:0px;">
+											<input type="text" ng-model = "RR.maxSalary" class="form-control" placeholder="max(P.A)" required tabindex="8">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Experience:</label>
+									<div class="col-md-8">
+										<label class="text-left col-md-2" style="margin-top:2%;">Min:</label>
+										<span class="text-left col-md-4" style="margin-top:2%;">{{ExperianceMin}}</span>
+										<label class="text-left col-md-2" style="margin-top:2%;">Max:</label>
+										<span class="text-left col-md-4" style="margin-top:2%;">{{ExperianceMAx}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request Status:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.Status"
+										 ng-options = "obj.Status for obj in StatusListDtls " required tabindex="9">			
+											<option value="">Please Select Status</option>
+									</select>
+									</div>
+								</div>
+							<hr class="col-md-12">
+							</div>
+							
+					</div>
+				</div>
+			</div>
+
+<!-- --------------------------------------------------------------------------------------------- -->
+			<div class="col-md-12" ng-show="searchRRPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Recruitment Request List</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+					<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div ng-show="searchRRItem">
+						<div class="form-group input-group col-md-12">
+								<div class="col-md-6">
+									<label for="Requester" class="control-label col-md-4" >Requester Id:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model="RR.EmpId" class="form-control" placeholder="Enter Requester Id" tabindex="1">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Department:</label>
+									<div class="col-md-8">
+										<select class = "form-control" ng-model="RR.Department"
+											ng-options="Dept.DeptName for Dept in DepartmentListDtls" tabindex="2">
+											<option value = "">Select Department</option>
+										</select>
+									</div> 
+								</div>
+						</div>	
+					
+						<div class="form-group input-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request:</label>
+									<div class="col-md-8">
+										
+											<div class="input-group" style="padding-right: 0px;padding-left: 0px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.Request" is-open="opened3"  datepicker-options="dateOptions" 
+													required close-text="Close"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open3($event)" tabindex="3"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="control-label col-md-4">Closure:</label>
+									<div class="col-md-8">
+										
+											<div class="input-group" style="padding-right: 0px;padding-left: 0px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.Expected" is-open="opened4"  datepicker-options="dateOptions" 
+													required close-text="Close"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open4($event)" tabindex="4"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										
+									</div>
+								</div>
+						</div>
+						<div class="form-group input-group col-md-12">
+							<div class="col-md-6">
+								<label for="Fullname" class="control-label col-md-4" >Request Status:</label>
+								<div class="col-md-8">
+									<select class="form-control" ng-model="RR.Status"
+										ng-options = "obj.Status for obj in StatusListDtls " tabindex="6">			
+										<option value="">Please Select Status</option>
+								</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<button type="button" class="btn btn-success btn-sm col-md-offset-4" ng-click="searchRR(RR);" tabindex="7">
+								Search</button>
+								<button type="button" class="btn btn-danger btn-sm" ng-click="clearRR()" tabindex="8">
+								Clear</button>
+							</div>
+						</div>
+					</div>	
+					
+						<div class="col-md-12">
+							<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-2 col-xs-12">
+											<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('EmpId', true)">Requester Id &#9650;</span>
+												<span ng-show="hName==false" ng-click="hName=true;order('EmpId', false)">Requester Id &#9660;  </span></a> 
+										</th>
+										<th style="border:none" class="col-md-2 col-xs-12"><a href=""><span ng-hide="hName==false" ng-click="hName=false;order('Position', true)">Position &#9650;</span>
+												<span ng-show="hName==false" ng-click="hName=true;order('Position', false)">Position &#9660;  </span></a></th>
+										<th style="border:none" class="col-md-1 col-xs-12">Department</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Req Date</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Exp Date</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Opening</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Salary(min)</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Salary(max)</th>
+										<th style="border:none" class="col-md-2 col-xs-12">Satus</th>
+									</tr>				
+								</thead>						
+								<tbody>
+										<tr ng-repeat="obj in ArrRR">
+										<td class="col-md-2 col-xs-12">{{obj.EmpId}}</td>
+										<td class="col-md-2 col-xs-12"><a href="" ng-click="editRR(obj);">{{obj.Position}}</a></td>
+										<td class="col-md-1 col-xs-12">{{obj.DeptName}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.RequestDate}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.ExpectedDate}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.Openings}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.SalaryMin}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.SalaryMax}}</td>
+										<td class="col-md-2 col-xs-12">{{obj.Status}}</td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+							</div>
+						</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		
+<!-- --------------------------------------------------------------------------------------------------- -->
+			<div class="col-md-offset-1 col-md-10" ng-show="editRRPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Edit Recruitment Request</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+							<span class="label label-warning pull-right" ng-show="EditRRerror">{{EditRRerror}}</span>
+					</div>
+					<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div><div class="col-md-12">&nbsp;</div>
+							
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Job Details</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Position:</label>
+									<div class="col-md-8">
+										<input type="text" name="position" class="form-control" ng-model="RRDtls.PositionName" disabled>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Job Openings:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model = "RRDtls.Openings" class="form-control" placeholder="Job Openings" required tabindex="2">
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Experience & Salary</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Expected Salary(P.A):</label>
+									<div class="col-md-8">
+										<div class="col-md-6" style="padding-left:0px;">
+											<input type="text" ng-model = "RRDtls.minSalary" class="form-control" placeholder="min(P.A)" required tabindex="3">
+										</div>
+										<div class="col-md-6" style="padding-right:0px;">
+											<input type="text" ng-model = "RRDtls.maxSalary" class="form-control" placeholder="max(P.A)" required tabindex="4">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request Status:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RRDtls.Status"
+										 ng-options = "obj.Status for obj in EditStatelistDtls " required tabindex="5">			
+											<option value="">Please Select Status</option>
+									</select>
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Date</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label class="control-label col-md-4">Expected Closure:</label>
+									<div class="col-md-8">
+										<div class="form-group">
+											<div class="input-group" style="padding-right: 0px;padding-left: 0px;margin-left: -12px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RRDtls.ExpectedDate" is-open="opened5"  datepicker-options="dateOptions" 
+													required close-text="Close" min-date="minDate"  max-date="maxDate"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open5($event)" tabindex="6"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										</div>	
+										
+									</div>
+								</div>
+								<div class="col-md-6">
+								<button type="button" class="btn btn-success btn-sm col-md-offset-4" ng-show="UpdateRecruitmentRequestBtn" ng-click="UpdateRR(RRDtls);" tabindex="7">
+								Update</button>
+								<button type="Reset" class="btn btn-danger btn-sm" ng-click="cancelRRBtn();" tabindex="8">
+								Cancel</button>
+							</div>
+							</div>
+							
+					</div>
+				</div>
+			</div>
+</form>
+</div>
+

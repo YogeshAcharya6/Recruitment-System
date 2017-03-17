@@ -1,0 +1,344 @@
+<div class="panel panel-primary" ng-hide = "RRmainPanel">		
+	<ul class="breadcrumb" style="margin:0px">
+		<li><a href ng-click = "GotoRRHome()"> Home</a></li>
+		<li><a href ng-click = "GotoRRSearch()">Recruitment Request</a></li>
+		<li class="active">Search</li>
+		<button type="button" class="btn btn-primary col-sm-offset-7" name="Search" ng-click="ShowSearchRR()" >
+		<span class="glyphicon glyphicon-search"><strong> Search</strong></span></button>
+		<button type="button" class="btn btn-primary" ng-click="ShowAddRR()">
+		<span class="glyphicon glyphicon-plus"><strong> Add</strong></span>
+		</button>
+	</ul>
+	
+	<div class="panel-body" ng-show = "SearchPanelRR">	
+		<form  class="form-horizontal" role="form" name = "RRAddForm" method="POST">
+			<div class="form-group">
+				<label for="Fullname" class="control-label col-sm-3" >Requester Id:</label>
+				<div class="col-sm-3">
+					<input type="text" ng-model = "RR.EmpId" class="form-control col-sm-3" placeholder="Enter Requester Id">
+				</div>
+				<label for="Fullname" class="control-label col-sm-2">Department:</label>
+				<div class="col-sm-3">
+					<select class="form-control" ng-model="RR.DeptId"
+					 ng-options = "Dept.DeptName for Dept in Department ">			
+						<option value="">Please Select Department</option>									
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="Date" class="col-sm-3 control-label" >Date:</label>
+				<label for="fromDate" class="col-sm-1 control-label" >Request:</label>
+				<div class="col-sm-2">
+					<div class="input-group">
+						<input type="text" name="RequestDateS" class="form-control input-sm" datepicker-popup="{{'dd-MM-yyyy' }}"  ng-disabled = "RequestDateS" ng-model = "RR.RequestDateS" is-open="opened2" datepicker-options = "dateOptions" date-disabled = "disabled(date, mode)" ng-required = "true" close-text = "Close"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default input-sm" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>	
+					</div>
+				</div>
+				<label for="ToDate"  class="col-sm-1 control-label col-sm-offset-1" >Clouser:</label>
+				<div class="col-sm-2">
+					<div class="input-group">
+						<input type="text" name="ExpectedDate" class="form-control input-sm" datepicker-popup="{{'dd-MM-yyyy' }}"  ng-disabled = "ExpectedDate" ng-model = "RR.ExpectedDate" is-open="opened1" datepicker-options = "dateOptions" date-disabled = "disabled(date, mode)" ng-required = "true" close-text = "Close" />
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default input-sm" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>	
+					</div>
+				</div>
+			</div>
+							
+			<div class="form-group">
+				<label for="Fullname" class="control-label col-sm-3" >Request status:</label>
+				<div class="col-sm-3">
+					<select class="form-control" name="status" ng-model="RR.StatusId"
+					 ng-options = "stat.Status for stat in StatusArr">					
+							<option value="">Please Select Department</option>							
+					</select>
+				</div>
+				<div class="col-sm-6 ">
+					<button type="button" class="col-sm-offset-4 btn btn-success glyphicon glyphicon-circle-aRRow-right" 
+					name="go" ng-click="RRtblinfo(RR)"><b>&nbsp;Go</b></button>
+					<button type="button" class=" btn btn-danger" name="clear"><b> Clear </b></button>
+				</div>
+			</div>
+		</form>	
+	</div>
+			
+	<div class="panel-body scroll" ng-show="RRTableDiv">
+		<table class="table table-bordered" >
+			<tr>
+			<th><a>
+			<span  ng-hide = "EmpId==false" ng-click="EmpId = false;orderItem('idRR', true); "><b>Requester Id</b><span ng-show = "Itemcodeascenarrow">&#9650;</span></span>
+			<span ng-show = "EmpId==false" ng-click="EmpId = true;orderItem('idRR', false); "><b> Requester Id </b><span ng-show = "ItemCodedecenarrow">&#9660;</span></span></a></th>
+				<!--th class="text-center">Requester Id</th-->
+				<th class="text-center">Position</th>
+				<th class="text-center">Department</th>
+				<th class="text-center">Openings</th> 
+				<th class="text-center">Request Date</th>
+				<th class="text-center">Expected Date</th>
+				<th class="text-center">Expected Salary(min)</th>
+				<th class="text-center">Expected Salary(max)</th>
+				<th class="text-center">Status</th>
+			</tr>
+											
+			<tr ng-repeat = "obj in ArrRRSearch">
+				<td class="text-center"><a href ng-click="RRview(obj)">{{obj.EmpId}}</a></td>
+				<td class="text-center">{{obj.Position}}</td>
+				<td class="text-center">{{obj.DeptName}}</td>
+				<td class="text-center">{{obj.Openings}}</td> 
+				<td class="text-center">{{obj.RequestDate | date : 'dd-MM-yyyy'}}</td> 
+				<!-- <td class="text-center">{{obj.RequestDate }}</td> -->
+				<td class="text-center">{{obj.ExpectedDate | date : 'dd-MM-yyyy'}}</td>
+				<td class="text-center">{{obj.SalaryMin}}</td>
+				<td class="text-center">{{obj.SalaryMax}}</td>
+				<td class="text-center">{{obj.Status}}</td>
+			</tr>					
+		</table>
+	</div>
+</div>
+
+	<!------------------------RR Info------------------------>
+	
+	<div class = "panel panel-primary" ng-show = "RRAddPanel">
+		
+		<form  class = "form-horizontal" action = "#" role = "form" name = "SaveRRForm" method = "POST" enctype = "multipart/form-data">	
+		<ul class = "breadcrumb" style = "margin-bottom:0;">
+			<li><a href ng-click = "GotoRRHome()">Home</a></li>
+			<li><a href ng-click = "GotoRRSearch()">Recruitment Request</a></li>
+			<li class = "active">Add</li>		
+			<button type = "button" class = "btn btn-success col-sm-offset-7" ng-click="RRAdd(RR)" ng-disabled="SaveRRForm.$invalid">
+			<span class = "glyphicon glyphicon-ok"><strong>Save</strong></span></button>
+			<button type = "button"  class = "btn btn-danger" name = "Cancel" id = "Cancel" >
+			<span class = "glyphicon glyphicon-remove"><strong>Cancel</strong></span></button>	
+		</ul>
+		<div class = "panel-body scroll">
+			
+				<div class = "form-group">
+					<label for = "Fullname" class = "control-label col-sm-2">Requester Id:</label>
+					<div class = "col-sm-3">
+						<input type = "Text" class = "form-control" ng-model = "RR.EmpId" required>
+					</div>
+					<label for = "Address" class = "control-label col-sm-3">Department:</label>
+					<div class = "col-sm-3">
+						<select class="form-control"  ng-model="RR.DeptId" 
+						ng-options = "Dept.DeptName for Dept in Department" required>			
+						<option value="">Please Select Department</option>									
+						</select>
+					</div>
+					
+				</div>
+						
+				<hr class = "hr">
+				<label for = "Job Details" class = "control-label"><u>Job Details</u></label>
+				<div class = "form-group">
+					<label for = "Position" class = "control-label col-sm-2">Position:</label>
+					<div class="col-sm-3">
+						<select class="form-control"  ng-model="RR.Position" ng-options = "Pos.Position for Pos in PositionArr" ng-change = "PositionDetail(RR.Position)" required>			
+						<option value="">Please Select Position</option>
+						</select>
+					</div>
+					<label for = "Jobopenings" class = "control-label col-sm-3"> Job openings:</label>
+						<div class = "col-sm-3">
+							<input type = "Text" class = "form-control" name = "Openings" ng-model = "RR.Openings" placeholder = "Job openings" ng-keypress="NumberCheck($event);" required>
+							
+							<!-- <span style = "color:red" ng-show = "SaveRRForm.Openings.$error.pattern">Enter only Numbers....!</span> -->
+						</div>	
+				</div>
+
+				<hr class = "hr">
+				<label for = "Fullname" class = "control-label"><u>Date</u></label>				
+				<div class = "form-group">
+					<label class = "control-label col-sm-2">Request:</label>
+					<div class = "col-sm-3">
+						<!-- <input type = "date" class = "form-control col-sm" ng-model = "RR.RequestDate" required> -->
+						<div class="input-group">
+							<input type="text" name="RequestDate" class="form-control input-sm" datepicker-popup="{{'dd-MM-yyyy'}}"  ng-disabled = "RequestDate" ng-model = "RR.RequestDate" is-open="opened" datepicker-options = "dateOptions" date-disabled = "disabled(date, mode)" ng-required = "true" close-text = "Close" />
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default input-sm" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	
+						</div> 
+						
+					</div>
+					
+					<label class = "control-label col-sm-2 col-sm-offset-1" >Expected Closure:</label>
+					<div class = "col-sm-3">
+						<!-- <input type = "date" class = "form-control col-sm" ng-model = "RR.ExpectedDate" required> -->
+						<div class="input-group">
+							<input type="text" name="ExpectedDate" class="form-control input-sm" datepicker-popup="{{'dd-MM-yyyy' }}"  ng-disabled = "ExpectedDate"  min-date="{{RequestDate2}}" ng-model = "RR.ExpectedDate" is-open="opened1" datepicker-options = "dateOptions" date-disabled = "disabled(date, mode)" ng-required = "true" close-text = "Close" />
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default input-sm" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	
+						</div>
+					</div>
+				</div>
+				
+				<hr class = "hr">
+				<div>
+				<label for = "Fullname" class = "control-label"><u>Qualification & Skills</u></label>
+				<div class="form-group">
+					<label for="experience" class="col-sm-2 text-right">Qualification:</label>
+					<span class="col-sm-2" ng-repeat="RR in PositionDtl">
+						<span ng-repeat="quali in RR.qualiArr">{{$index !=0 ? ' , '+ quali : quali}}</span>
+					</span>
+					
+					<label for="experience" class="col-sm-2 text-right col-sm-offset-2">Skills:</label>
+					<span class="col-sm-3" ng-repeat="RR in PositionDtl">
+						<span ng-repeat="skill in RR.skillArr">{{$index !=0 ? ' , '+ skill : skill}}</span>
+					</span>
+				</div>
+				<hr class = "hr">
+				</div>
+				<label for = "Fullname" class = "control-label"><u>Experience & Salary</u></label>
+				<div class = "form-group">
+					<div class = "col-sm-12">
+					<label for = "salary" class = "control-label col-sm-2">Expected Salary(P.A):</label>
+						<div class = "col-sm-3">
+							<div class = "col-sm-6">
+								<input type = "text" class = "form-control" placeholder = "min(P.A)" name = "MinSal" ng-model = "RR.SalaryMin" ng-keypress="NumberCheck($event);" required>
+								<!-- <span style = "color:red" ng-show = "SaveRRForm.MinSal.$error.pattern">Enter only Numbers....!</span> -->
+							</div>
+							<div class="col-sm-6">	
+								<input type = "text" class = "form-control" placeholder = "max(P.A)" name = "MaxSal" ng-model = "RR.SalaryMax" ng-keypress="NumberCheck($event);" required>
+								<!-- <span style = "color:red" ng-show = "SaveRRForm.MaxSal.$error.pattern">Enter only Numbers....!</span> -->
+								<span style="color:red"> {{ ErrSalary }} </span>
+							</div>
+						</div>	
+					<div>
+						<div class = "col-sm-6">
+						<label for = "Experience" class = "control-label col-sm-2 col-md-offset-4">Experience:</label>
+						<div class = "form-group" style="margin-top:5px">
+							<div class = "col-sm-2">
+							<label for="experience" class="col-sm-1 text-right" >Min:</label>
+							<span class="col-sm-1 col-md-offset-2" ng-model ="RR.ExperianceMin" ng-repeat="RR in PositionDtl">{{RR.ExperianceMin}}</span>
+							</div>
+							<div class = "col-sm-2">
+							<label for="experience" class="col-sm-1 text-right">Max:</label>							
+							<span class="col-sm-1 col-md-offset-2" ng-model ="RR.ExperianceMAx" ng-repeat="RR in PositionDtl">{{RR.ExperianceMAx}}</span>
+							</div>
+						</div>
+						</div>
+					</div>							
+					</div>
+				</div>
+				
+				<div class = "form-group">
+					<label for = "Fullname" class = "control-label col-sm-2">Request status:</label>
+					<div class = "col-sm-3">
+						<select class="form-control"  ng-model="RR.StatusId" 
+						ng-options = "stat.Status for stat in StatusArr" required>			
+						<option value="">Please Select status</option>
+						</select>
+					</div>
+				</div>					
+		</div>
+	</form>
+	</div>
+	<!--------------- RR View --------------------->
+	
+	<div class="panel panel-primary" ng-show = "RRViewPanel">	
+	<!-- <style>.form-horizontal .form-group {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: -9px;
+}</style> -->
+		<ul class="breadcrumb" style = "margin-bottom:0;">
+			<li><a href ng-click = "GotoRRHome()">Home</a></li>
+			<li><a href ng-click = "GotoRRSearch()">Recruitment Request</a></li>
+			<li class="active">View</li>
+			<button type="button" class="col-xs-offset-7 btn btn-primary" ng-click = "RREdit()">
+			<span class="glyphicon glyphicon-edit"><strong> Edit</strong></span></button>
+			<button type="button" class="btn btn-primary"name="Cancel">
+			<span class="glyphicon glyphicon-circle-aRRow-left"><strong> Back </strong></span></button>
+		</ul>
+		
+	<div class="panel-body scroll">		
+			<form class="form-horizontal">
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Requester Id:</label>
+				<span class="col-xs-4">{{RR.EmpId}}</span>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Department:</label>
+				<span class="col-xs-4" ng-if = "!RR.DeptName">{{RR.DeptId.DeptName}}</span>
+				<span class="col-xs-4" ng-if = "RR.DeptName">{{RR.DeptName}}</span>	
+			</div>
+			
+			<hr class="hr">
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" ><u>Job Details</u></label>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Position:</label>
+				<span class="col-xs-4" ng-if = "!RR.Position">{{RR.Position.Position}}</span>
+				<span class="col-xs-4" ng-if = "RR.Position">{{RR.Position}}</span>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Job Openings:</label>
+				<span class="col-xs-4">{{RR.Openings}}</span>
+			</div>
+					
+			<hr class="hr">
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right"><u>Date</u></label>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Request Date:</label>
+				<span class="col-xs-4">{{RR.RequestDate | date : 'dd-MM-yyyy'}}</span>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Expected Closure:</label>
+				<span class="col-xs-4">{{RR.ExpectedDate | date : 'dd-MM-yyyy'}}</span>
+			</div>
+					
+			<hr class="hr">
+			<span ng-repeat = "dtl in RR.PositionDtl">
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Qualification:</label>
+				<div class = "col-xs-4">
+				<table border="1" id = "ordertbl" cellpadding="10px" style="border-collapse:collapse;">
+					<tr>
+						<td ng-repeat = "quali in dtl.qualiArr">&nbsp;{{ quali }}&nbsp;</td>
+					</tr>	
+				</table>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Skill:</label>
+				<div class = "col-xs-4">
+				<table border="1" id = "ordertbl" cellpadding="10px" style="border-collapse:collapse;">
+					<tr>
+						<td ng-repeat = "skill in dtl.skillArr">&nbsp;{{ skill }}&nbsp;</td>
+					</tr>	
+				</table>
+				</div>
+			</div>
+					
+			<hr class="hr">					
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Experiance:</label>
+				<label for="experience" class="col-xs-1 text-right" >Min:</label>			
+				<span class="col-xs-1">{{dtl.ExperianceMin}}</span>
+				<label for="experience" class="col-xs-1 text-right" >Max:</label>
+				<span class="col-xs-1">{{dtl.ExperianceMAx}}</span>
+			</div>
+			</span>	
+			
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Expected Salary(P.A):</label>	
+				<label for="experience" class="col-xs-1 text-right" >Min:</label>			
+				<span class="col-xs-1">{{RR.SalaryMin}}</span>
+				<label for="experience" class="col-xs-1 text-right" >Max:</label>			
+				<span class="col-xs-1">{{RR.SalaryMax}}</span>
+			</div>				
+			<hr class="hr">
+			<div class="form-group">
+				<label for="CandidateName" class="col-xs-2 text-right" >Request Status:</label>
+				<span class="col-xs-4" ng-if = "!RR.Status">{{RR.StatusId.Status}}</span>
+				<span class="col-xs-4" ng-if = "RR.Status">{{RR.Status}}</span>
+			</div>			
+	</form>	
+	</div>	
+	</div>
+
+	

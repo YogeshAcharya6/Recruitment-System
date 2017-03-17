@@ -1,0 +1,190 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<div class="col-md-12">&nbsp;</div>
+	<div class = "panel panel-default">
+		<div class="panel-heading  col-md-12">
+			<span class="glyphicon glyphicon-dashboard"><b> &nbsp;Dashboards</b></span>
+			<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px" style="margin-top: 1%;">
+			<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+		</div>
+		<div class = "panel-body">
+		<div class="row">&nbsp;</div>
+			<div class = "col-md-12">
+				<label for="JobDescription" class="control-label col-md-3">Job Description :<span><a href ng-click = "ShowJDDtls();">&nbsp;{{CntJD}}</a></span><label ng-show="AddCntJD">&nbsp;+&nbsp;<a href="" ng-click="showAddJDDtls();">{{ AddCntJD }}</a></label></label>
+			</div>
+			<div class = "col-md-12">
+			<div class="panel-body">
+			
+						<div ng-show="JDtbl">
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-3 col-xs-12">Position</th>
+										<th style="border:none" class="col-md-2 col-xs-12">Qualification</th>
+										<th style="border:none" class="col-md-2 col-xs-12">Skill</th>
+										<th style="border:none" class="col-md-3 col-xs-12">Role & Resposibility</th>
+										<th style="border:none" class="col-md-2 col-xs-12">Exp Range(mth)</th>
+									</tr>				
+								</thead>						
+								<tbody>
+									<tr ng-repeat="obj in ArrJobDesc">
+										<td class="col-md-2 col-xs-12">{{obj.Position}}</td>
+										<td class="col-md-2 col-xs-12">
+											<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+												{{ $index !=0 ? ' , '+ quali : quali }}
+											</span> 
+										</td>
+										<td class="col-md-2 col-xs-12">
+											<span name="SkillName" ng-repeat="skill in obj.TechSkillArr">
+											{{ $index !=0 ? ' , '+ skill : skill }}
+											</span> 
+										</td>
+										<td class="col-md-3 col-xs-12"><a href="" ng-mouseover="getRoleHtml(obj.Role);" ng-mouseleave="leaveRoleHtml();"><label>Role...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" ng-mouseover="getRoleHtml(obj.Responsibility);" ng-mouseleave="leaveRoleHtml();"><label>Responsibility...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal2,#myModal3" ng-focus="#myModal" ng-click="getModalData(obj.Role,obj.Responsibility);">Show</button></td>
+										<div id="myModal2" class="modal fade" role="dialog">
+											<div class="modal-dialog" style="width: 94%;">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal">&times;</button>
+														<h4 class="modal-title">Role</h4>
+													</div>
+													<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+														<span ng-bind-html = "Role"></span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div id="myModal3" class="modal fade" role="dialog" style="margin-top:318px;">
+											<div class="modal-dialog" style="width: 94%;">
+											<!-- Modal content-->
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal">&times;</button>
+														<h4 class="modal-title">Responsibility</h4>
+													</div>
+													<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+														<span ng-bind-html = "Responsibility"></span>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<td class="col-md-2 col-xs-12">{{obj.ExperianceMin}}<span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</span>{{obj.ExperianceMAx}}</td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+						<div class="col-md-12" ng-show="RoleDiv" style="border-radius: 5px;margin-top:-22%;border:solid 3px solid;background-color:gray;width:70%;color:white;align:center;margin-left:15%;height:248px; max-height: 300px;overflow-y: scroll;">
+							<span ng-bind-html = "objRole"></span>
+						</div>
+			</div>	
+			</div>
+		
+			
+			<div class = "col-md-12">
+				<label for="JobRecruitmentRequest" class="control-label col-md-3">Job Recruitment Request :<span><a href ng-click = "ShowRRDtls();">&nbsp;{{CntRR}}</a></span><label ng-show="AddCntRR">&nbsp;+&nbsp;<a href="" ng-click="showAddRRDtls();">{{ AddCntRR }}</a></label></label>
+			</div>
+			<div class = "col-md-12">
+				<div class="panel-body">
+					<div ng-show="RRtbl">
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-2 col-xs-12">
+											Requester Id 
+										</th>
+										<th style="border:none" class="col-md-2 col-xs-12">
+												Position
+										<th style="border:none" class="col-md-1 col-xs-12">Department</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Req Date</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Exp Date</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Opening</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Salary(min)</th>
+										<th style="border:none" class="col-md-1 col-xs-12">Salary(max)</th>
+										<th style="border:none" class="col-md-2 col-xs-12">Satus</th>
+									</tr>				
+								</thead>						
+								<tbody>
+										<tr ng-repeat="obj in ArrRR">
+										<td class="col-md-2 col-xs-12">{{obj.EmpId}}</td>
+										<td class="col-md-2 col-xs-12">{{obj.Position}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.DeptName}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.RequestDate}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.ExpectedDate}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.Openings}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.SalaryMin}}</td>
+										<td class="col-md-1 col-xs-12">{{obj.SalaryMax}}</td>
+										<td class="col-md-2 col-xs-12">{{obj.Status}}</td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+							</div>
+				</div>	
+			</div>
+			
+			<div class = "col-md-12">
+				<label for="Candidate" class="control-label col-md-2">Candidate :<span><a href ng-click = "ShowCandidateDtls();">&nbsp;{{Cntcandidate}}</a></span><label ng-show="AddCntcandidate">&nbsp;+&nbsp;<a href="" ng-click="showAddCandidateDtls();">{{ AddCntcandidate }}</a></label></label>
+			</div>
+			<div class = "col-md-12">
+			<div class="panel-body">
+				<div class="col-md-12" ng-show="Candidatetbl">
+					<scrollable-table>
+						<table class="table table-striped table-condensed">
+							<thead>
+								<tr>
+									<th class="col-md-2">
+									<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('CandidateName', true)">Name &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('CandidateName', false)">Name &#9660;  </span></a> 
+									</th>
+									<th class="col-md-1">Qualification</th>
+									<th class="col-md-1">TechSkill</th>
+									<th class="col-md-2">Total Experience(mth)</th>
+									<th class="col-md-2">Notice Period(mth)</th>
+									<th class="col-md-1">Salary</th>
+									<th class="col-md-1">Designation</th>
+									<th class="col-md-2">
+										<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('RegDate', true)">Registration Date &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('RegDate', false)">Registration Date &#9660;  </span></a> 
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat = "obj in ArrCandiSearch">
+									<td><a href ng-click ="candiview(obj)">{{obj.CandidateName}}</a></td>
+									<td>
+										<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+										{{ $index !=0 ? ' , '+ quali : quali }}
+										</span> 
+									</td>
+							
+									<td>
+										<span name = "skillName"  ng-repeat="skill in obj.TechSkillArr">
+										{{ $index !=0 ? ' , '+ skill : skill }}
+										</span> 
+									</td>
+									<td>{{obj.TotalExp}}</td>
+									<td>{{obj.NoticePeriod}}</td>
+									<td>{{obj.CurrentSalary}}</td>
+									<td>{{obj.CurrentDesignation}}</td>
+									<td>{{obj.RegDate | date : 'dd-MM-yyyy'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</scrollable-table>
+				</div>
+			</div>
+		    </div>
+		</div>
+	</div>	
+		

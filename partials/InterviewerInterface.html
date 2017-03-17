@@ -1,0 +1,258 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<div>
+<form novalidate name="RRSchedule" class="form-horizontal" role="form">
+			<div>
+				<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="goInterviewerInt();">My Interviews</a></li>
+				   </ul>
+				</div>
+			</div>	
+<!-- --------------------------------------------------------------------------------------------- -->
+			<div class="col-md-12">&nbsp;</div>
+			<div class="col-md-12" ng-show="myRRPanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>My Interviews</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errmsg">{{errmsg}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div>
+							<scrollable-table>
+							<table class="table table-condensed table-striped table-responsive">
+								<thead>
+									<tr>
+										<th style="border:none" class="col-md-3">
+											Position(fill/Openings)
+										</th>
+										<th style="border:none" class="col-md-2">Candidate</th>
+										<th style="border:none" class="col-md-2">Interaction History</th>
+										<th style="border:none" class="col-md-1">Activity</th>
+										<th style="border:none" class="col-md-2">Schedule</th>
+										<th style="border:none" class="col-md-1">Role</th>
+										<th style="border:none" class="col-md-1">Action</th>
+									</tr>				
+								</thead>						
+								<tbody>
+									<tr ng-repeat="obj in ArrIntInterfaceDtlsDtls">
+										<td class="col-md-1">{{obj.Position}}&nbsp;&nbsp;<span>(</span><span ng-if="obj.Fill == null">{{0}}</span><span>{{obj.Fill}}</span>&nbsp;&nbsp;<span>/</span>&nbsp;&nbsp;{{obj.Openings}}<span>)</span></td>
+										<td class="col-md-1">{{obj.CandidateName}}&nbsp;&nbsp;<a href="" ng-click="openDocument(obj.Resume);"><span class="glyphicon glyphicon-paperclip"></span></a></td>
+										<td class="col-md-2"><span ng-if="obj.ActiveFeedback == 0">--</span><span ng-if="obj.ActiveFeedback == 1"><button class="btn btn-default btn-xs" ng-click="showIIHistory(obj);">Show</button></span></td>
+										<td class="col-md-1">{{obj.interviewTypeDesc}}</td>
+										<td class="col-md-1">Date:{{obj.intDate}},{{obj.altIntDate}}<br>
+															 </td>
+										<td class="col-md-1"><span ng-if="obj.interviewTypeDesc == 'Face To Face' || obj.interviewTypeDesc == 'Group Interview' || obj.interviewTypeDesc == 'Phone Interview' || obj.interviewTypeDesc == 'Programming Test' || obj.interviewTypeDesc == 'Apptitude Test'">Evaluator</span><span ng-if="obj.interviewTypeDesc == 'Panel Interview' || obj.interviewTypeDesc == 'Technical Interview' || obj.interviewTypeDesc == 'HR Interview'">Interviewer</span></td>
+										<td class="col-md-2"><button class="btn btn-primary btn-xs" ng-click="getArrIntInterfaceIndex($index);">Feedback</button>&nbsp;<button class="btn btn-primary btn-xs" ng-click="showReshedulePanel(obj);">Reshedule</button></td>
+									</tr>
+								</tbody>
+							</table>
+							</scrollable-table>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+					<div id="myModal1" class="modal fade" role="dialog">
+						<div class="modal-dialog" style="width: 94%;">
+						<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Feedback</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container app">
+										<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll; name="htmlcontent" ng-model="feedback" ta-disabled='disabled'></div>
+									</div>
+								</div>
+								<div class="modal-footer">
+										<button class="btn btn-default btn-primary" ng-click="shortListed();" ng-show="ShortListedBtn" >Short Listed</button>
+										<button class="btn btn-default btn-primary" ng-click="onHold();" ng-show="OnHoldBtn" >On Hold</button>
+										<button class="btn btn-default btn-primary" ng-click="rejected();" ng-show="RejectedBtn" >Rejected</button>
+										<button class="btn btn-default btn-primary" ng-click="saveCandiFeedback(feedback);" ng-show="showfeedbackbtn">Save</button>
+										<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="myModal2" class="modal fade" role="dialog">
+						<div class="modal-dialog" style="width: 94%;">
+						<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Interaction History</h4>
+								</div>
+								<div class="modal-body">
+									<div class="col-md-12">
+										<div class="form-group col-md-6">
+											<label for="inputEmail3" class="col-sm-2 control-label" style="padding-left: 0;">Position Id</label>
+											<div class="col-sm-4">
+												<input type="text" class="form-control" ng-model="IIPositionId" id="inputEmail3" disabled>
+											</div>
+											<label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+											<div class="col-sm-4">
+												<input type="text" class="form-control" ng-model="IIPositionName" id="inputEmail3" disabled>
+											</div>
+										</div>
+										<div class="form-group col-md-4">
+											<label for="inputEmail3" class="col-sm-4 control-label">Candidate Name</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" ng-model="IICadiName" id="inputEmail3" disabled>
+											</div>
+										</div>
+										<!-- <button class="btn btn-default" ng-click="openDocument();"><span class="glyphicon glyphicon-paperclip">Attachment</span></button> -->
+									</div>
+									<br>
+									<br>
+									<br>
+									<div>
+										<scrollable-table>
+										<table class="table table-condensed table-striped table-responsive">
+											<thead>
+												<tr>
+													<th style="border:none" class="col-md-2">
+														Date
+													</th>
+													<th style="border:none" class="col-md-2">Activity</th>
+													<th style="border:none" class="col-md-2">Actors </th>
+													<th style="border:none" class="col-md-2">Status</th>
+													<th style="border:none" class="col-md-1">Feedback</th>
+												</tr>				
+											</thead>						
+											<tbody>
+												<tr ng-repeat="history in ArrIntHistory">
+													<td class="col-md-1">{{history.LUDT}}</td>
+													<td class="col-md-1">{{history.interviewTypeDesc}}</td>
+													<td class="col-md-2">{{history.Name}}</td>
+													<td class="col-md-2">{{history.interactionStatusDesc}}</td>
+													<td class="col-md-2"><a href="" ng-click="getCandidateFeedback(history);">feedback...</a></td>
+												</tr>
+											</tbody>
+										</table>
+										</scrollable-table>
+									</div>
+								</div>
+								<div class="modal-footer">
+										<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="myModal30" class="modal fade" role="dialog" style="margin-top: 14%; width: 70%;margin-left: 16%;">
+						<div class="modal-dialog" style="width: 94%;">
+						<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Feedback</h4>
+								</div>
+								<div class="modal-body" style="height:134px;max-height: 134px;overflow-y: scroll;">
+									<span ng-bind-html = "feeback"></span>
+								</div>
+								<div class="modal-footer">
+										<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+			<div class="col-md-10 col-md-offset-1" ng-show="InteractionSchedulepanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Interaction Reschedule</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="errormessage">{{errormessage}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+				<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Interview Type</label>
+							<div class="col-sm-8">
+								<select class = "form-control" ng-model="schedule.interviewTypeDesc"
+									ng-options="obj.interviewTypeDesc for obj in ArrInterviewTypeDtls" tabindex="1" required>
+									<option value = "">Select</option>
+								</select>
+								<!-- <input type="text" class="" id="inputEmail3" ng-model="schedule.InterviewType" placeholder="Interview Type" required tabindex="1"/> -->
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Interviewer</label>
+							<div class="col-sm-8">
+								<multi-select   
+									output-model="schedule.Name" 
+									input-model="ArrEmployeeDtls"    
+									button-label="Name"
+									helper-elements=""
+									item-label="Name"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="2"
+									required>
+								</multi-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Date</label>
+							<div class="col-sm-8 input-group" style="padding-left: 14px;padding-right: 13px;">
+								<!-- <input type="text" class="form-control" datepicker-popup 
+									ng-model="schedule.InteractionDate" is-open="opened2"  datepicker-options="dateOptions" 
+									close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open2($event)" tabindex="3"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	 -->
+								<input type="text" ng-model="schedule.InteractionDate" name="date3" value="" class="col-md-12">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=date3]').appendDtpicker({
+					
+				});
+			});
+		</script>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputEmail3" class="col-sm-4 control-label">Alternate Date</label>
+							<div class="col-sm-8 input-group" style="padding-left: 14px;padding-right: 0px;">
+								<!-- <input type="text" class="form-control" datepicker-popup 
+									ng-model="schedule.AInteractionDate" is-open="opened"  datepicker-options="dateOptions" 
+									required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open1($event)" tabindex="4"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>	 -->
+									<input type="text" ng-model="schedule.AInteractionDate" name="date4" value="" class="col-md-12">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=date4]').appendDtpicker({
+					
+				});
+			});
+		</script>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-7">
+						<div class="form-group pull-right">
+							<button class="btn btn-primary" ng-click="updateRRSchedule(schedule);" ng-disabled="RRSchedule.$invalid">Save</button>
+							<button class="btn btn-default" ng-click="goInterviewerInt();">Cancel</button>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+</form>

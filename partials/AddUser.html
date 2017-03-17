@@ -1,0 +1,97 @@
+<div class="container-fluid">
+	<div class="container">
+		<div class="col-md-12">
+			<form novalidate name="registerForm" method="POST" action="#" class="form-horizontal col-md-offset-2 col-md-8" role="form">
+			<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+				<div class="panel panel-default" ng-hide="hideLogin">
+					<div class="panel-heading col-md-12">
+						<span class="glyphicon glyphicon-user"></span><span>&nbsp;</span>
+						<strong>Add User</strong></a>
+						<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+						<span class="pull-right label label-success" ng-show="insertmsg">{{ insertmsg }}</span>
+						<span class="label label-warning pull-right">{{errmsg}}</span>
+					</div>
+					<div class="panel-body scrollBar6">
+					
+						<div class="well well-lg">
+							<div class="form-group">
+								<label for="Name">Name<span style="color:red">*</span> :</label>
+								<input type="text" class="form-control" id="Name" ng-model="register.name" placeholder="FirstName MiddleName LastName" tabindex="1" required autofocus>
+							</div>
+							<div class="form-group">
+								<label for="EmpId">Employee Id<span style="color:red">*</span> :</label>
+								<input type="text" class="form-control" id="EmpId"  ng-model="register.employeeId" placeholder="Employee Id" tabindex="2" required>
+							</div>
+							<div class="form-group">
+								<label for="DeptId">Department<span style="color:red">*</span> :</label>
+								<select class = "form-control" ng-model="register.departmentId"
+									ng-options="obj.DeptName for obj in DepartmentListDtls" tabindex="4" required>
+									<option value = "">Select Department</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="Designation">Designation<span style="color:red">*</span> :</label>
+								<select class = "form-control" ng-model="register.designation"
+									ng-options="obj.Designation for obj in DesignationListDtls" tabindex="4" required>
+									<option value = "">Select Designation</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="MobNo">Mobile No<span style="color:red">*</span> :</label>
+								<input type="text" class="form-control" id="MobNo" name="mobileNo" ng-model="register.mobileNo" placeholder="Mobile Number" ng-pattern="/^(\+\d{1,3}[- ]?)?\d{10}$/" tabindex="5" required>
+								<span class="label label-info" ng-show="registerForm.mobileNo.$dirty && registerForm.mobileNo.$error.pattern">Mobile No should be 10 digit</span>
+							</div>
+							<div class="form-group">
+								<label for="AltContactNo">Alternate Contact No :</label>
+								<input type="text" class="form-control" name="altcontact" id="AltContactNo" ng-model="register.altContactNo" ng-pattern="/^(\d)+$/" placeholder="Contact Number" tabindex="6">
+								<span class="label label-info" ng-show="registerForm.altcontact.$dirty && registerForm.altcontact.$error.pattern">enter digit only</span>
+							</div>
+							<div class="form-group">
+								<label for="Email">Email Id<span style="color:red">*</span> :</label>
+								<input type="email" name="emailId" class="form-control" id="Email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="abc@gmail.com" ng-model="register.emailId" tabindex="7" required>
+								<span class="label label-info" ng-show="registerForm.emailId.$error.pattern">invalid email !</span>
+							</div>
+							<div class="form-group">
+								<label for="Address">Address<span style="color:red">*</span> :</label>
+								<textarea class="form-control" rows="3" id="Address" placeholder="Address" ng-model="register.address" tabindex="8" required></textarea>
+							</div>
+							<div class="form-group">
+								<label for="userName" >Username<span style="color:red">*</span> :</label>
+								<input type="text" name = "userName" class="form-control" ng-model="register.userName" placeholder="Username" tabindex="9" required/>
+							</div>
+							<div class="form-group">
+								<label for="password">Password<span style="color:red">*</span> :</label>
+							
+								<input id="password" type="password" name="password" ng-model="register.password" class="form-control" placeholder="Enter Password" tabindex="10" 
+								ng-minlength="8" required ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/" ng-blur="CheckPassword(registration.newpasswd)"/>
+								<span class="label label-info" ng-show="registerForm.password.$dirty && registerForm.password.$error.minlength">Password should be at least 8 characters.</span>
+								<span class="label label-info" ng-show="registerForm.password.$error.pattern">Enter atleast one lowercase,one uppercase,one digit</span>
+							
+							</div>
+							<div class="form-group">
+								<label for="password">Confirm Password<span style="color:red">*</span> :</label>
+								<input id="newCrmPass" type="password" name= "" ng-model="register.confirmPass" class="form-control" placeholder="Re-Enter the new password for confirmation" tabindex="11" required/>
+								<span class="label label-danger" ng-show="register.confirmPass != register.password"> Password does not match.</span>
+							</div>
+							<div class="form-group" style="margin-top:20px;">
+								<div class="col-md-4 col-md-offset-4">
+								<button type="button" class="btn btn-default btn-block btn-primary col-md-4" ng-click="createUser(register)" ng-disabled="registerForm.$invalid" tabindex="12">Save</button>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</form>
+		</div>
+	</div>	
+</div>
+<!-- Field	Type	Collation	Attributes	Null	Default	Extra	Action
+	idReg	int(11)			No	None	auto_increment	 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Name	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmpId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DeptId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DesignationId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	MobNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	AltContactNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmailId	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Address -->

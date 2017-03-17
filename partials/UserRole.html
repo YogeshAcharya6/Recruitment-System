@@ -1,0 +1,113 @@
+
+<div class="container-fluid col-md-12">
+	<div class="container">
+		<div class="col-md-12">
+			<form novalidate name="Roleform" method="POST" action="#" class="form-horizontal" role="form" style="margin-top:20px;">
+				<div class="col-md-8 col-md-offset-2" ng-show="UserRoleList">
+					<div class="panel panel-default">
+						<div class="panel-heading col-md-12">
+							<span><strong >User Role Details</strong></span>
+							<div class="input-group pull-right col-md-2">
+								<span><img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px"></span>
+								
+								<button type="button" class="close" ng-click="UserRoleDetails()">&times;</button>
+					
+							</div>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-6 col-md-offset-3">
+								<div class="row">&nbsp;&nbsp;</div>
+								<input type="text" name ="userName" class="form-control input-sm" ng-model="obj.UserName" required disabled/>
+							</div>
+							<table class="table table-fixed">
+							  <thead>
+								<tr>
+									<th class="col-xs-8">Role</th>
+									<th><th>
+								</tr>
+							  </thead>
+							  <tbody>
+								<tr ng-repeat="UserRole in AllUserRoleDtls">
+								  <td class="col-xs-8">{{UserRole.roleDescription}}</td>
+								  <td class="col-xs-4"><input type="checkbox" ng-model="UserRole.IsActive" name="rolecheckbox" value="">
+								  </td>
+								</tr>
+							  </tbody>
+							</table>
+							<input type="button" name="submitbtn" value="Save" class="btn btn-default col-md-offset-5 col-md-1" ng-click="SaveUserRole(AllUserRoleDtls);">
+						</div>
+					</div>	
+				</div>
+				</div>
+				<div class="col-md-8 col-md-offset-2" ng-show="UserList">
+					<div class="panel panel-default">
+						<div class="panel-heading col-md-12">
+							<span><strong >User List</strong></span>
+							<div class="input-group pull-right col-md-2">
+								<span><img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px"></span>
+								<span class="label label-warning pull-right" ng-model="errormsg">{{errormsg}}</span>
+								<span class="label label-warning pull-right" ng-model="insertmsg">{{insertmsg}}</span>
+							</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-fixed">
+							  <thead>
+								<tr>
+									<th class="col-xs-8">
+										<a href=""><span ng-hide="hName==false" ng-click="hName=false;orderUser('userId', true)">User &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;orderUser('userId', false)">User &#9660;  </span></a> 
+									</th>
+								</tr>
+							  </thead>
+							  <tbody>
+								<tr ng-repeat="User in AllUserDtls">
+								  <td class="col-xs-12"><a href="" ng-click="LoadUserRoleList(User);">{{User.userId}}</a></td>
+								</tr>
+							  </tbody>
+							</table>
+						</div>
+  
+						</div>	
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>	
+</div>
+<!-- <div class=" panel container-fluid mtop1 col-md-12">
+	<div class="container">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="panel panel-default">
+				<div class="panel-heading col-md-12">
+					<span><strong >Role List</strong></span>
+					<div class="input-group pull-right col-md-2">
+						<span class="input-group-btn pull-left">
+							<button type="button" ng-hide="addBtn" ng-click="addRoleBtn();" class="btn btn-sm btn-primary">
+								<strong>Add New</strong>
+							</button>
+						</span>	
+					</div>
+				</div>
+				<div class="panel-body">
+					<table class="table table-condensed table-responsive" style="margin-top:3%">
+						<thead>
+							<tr style="color:#54A4AE;">
+								<th class= "col-md-2">
+									<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('hostName', true)">Role &#9650;</span>
+									<span ng-show="hName==false" ng-click="hName=true;order('hostName', false)">Role &#9660;  </span></a> 
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="role in AllRoleDtls">
+								<td>{{role.roleDescription}}</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>	
+</div>
+ -->

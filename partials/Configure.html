@@ -1,0 +1,50 @@
+<div class="container-fluid">
+	<div class="container">
+		<!-- ng-submit="chkLogin(Login)" -->
+			<form  novalidate name="loginform" class="form-horizontal" role="form" style="margin-top:20px;">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="panel panel-default" ng-hide="hideLogin">
+						<div class="panel-heading col-md-12">
+							<span class="glyphicon glyphicon-list">&nbsp;</span>
+							<strong>Configure Information</strong></a>
+							<span><img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px"></span>
+							<label class="label label-warning col-md-offset-3" ng-model="insertmsg1">{{insertmsg1}}</label>
+							<label class="label label-warning col-md-offset-3" ng-model="errormsg1">{{errormsg1}}</label>
+							
+						</div>
+						<div class="panel-body">
+							<div class="col-md-12">&nbsp;</div>
+							<div class="col-md-12" style="padding-right: 0px;">
+								<table class="table" style="font-size:14px;margin-bottom:0px">
+									<tr class="active">
+										<th class="text-center">Key</th>
+										<th class="text-center">Value</th>
+									</tr>
+									<tr>
+									</tr>
+								</table>
+							</div>
+							<div class="col-md-12 scrollBar3" style="padding-right: 0px;">
+								<table class="table table-hover" style="font-size:14px;">
+									<tr ng-repeat="Configure in ArrCofigureDtls">
+										<td>{{Configure.searchkey}}</td>
+										<td><input type="text" class="form-control input-sm" ng-model="Configure.searchvalue" autofocus/></td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-md-12">&nbsp;</div>
+							<div class="col-md-12 text-center">	
+								<button type="submit" class="btn btn-primary btn-sm" ng-click = "EditConfigureDtls(ArrCofigureDtls)" tabindex="3" > Update </button>
+							</div>
+							
+						</div>	
+					</div>
+				</div>	
+			</form>
+		
+	</div>	
+</div>
+
+
+
+

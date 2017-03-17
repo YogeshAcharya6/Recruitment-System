@@ -1,0 +1,150 @@
+<div>
+	<form novalidate name="registerRR" class="form-horizontal" role="form">
+		<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Add Candidate</strong>
+								<button type="Reset" class="btn btn-danger btn-sm pull-right" ng-click="SearchRRBtn();" tabindex="11">
+								<span class="glyphicon glyphicon-remove"><strong>Cancel</strong></span></button>
+								<button type="button" class="btn btn-success btn-sm pull-right" ng-click="SaveRR(RR);" tabindex="10">
+								<span class="glyphicon glyphicon-ok"><strong>Save</strong></span></button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+							<span class="label label-success pull-right" ng-show="successmsg">{{successmsg}}</span>
+					</div>
+					<div class="panel-body">
+					<div class="col-md-12">&nbsp;</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="candidate" class="control-label col-md-4" >Candidate Name:</label>
+									<div class="col-md-8">
+										<input type="text" ng-model="candidateDtls.CandiName" class="form-control" placeholder="Enter Candidate Name" required tabindex="1">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Upload Resume:</label>
+									<div class="col-md-8">
+										<input type="file" ng-model="candidateDtls.Resume" class="form-control" required tabindex="2">
+									</div> 
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Registration Date:</label>
+									<div class="col-md-8">
+										<div class="input-group">
+											<input type="text" class="form-control" datepicker-popup 
+													ng-model="candidateDtls.RequestDate" is-open="opened2"  datepicker-options="dateOptions" 
+													required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default" ng-click="open2($event)" tabindex="5"><i class="glyphicon glyphicon-calendar"></i></button>
+											</span>	
+										</div>
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Date</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request:</label>
+									<div class="col-md-8">
+										<div class="form-group">
+											<div class="input-group" style="padding-right: 14px;padding-left: 16px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.RequestDate" is-open="opened2"  datepicker-options="dateOptions" 
+													required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open2($event)" tabindex="5"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										</div>	
+											<!-- <input type="text" ng-model ="RR.RequestDate" class="form-control " required tabindex="4"> -->
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Expected Closure:</label>
+									<div class="col-md-8">
+										<div class="form-group">
+											<div class="input-group" style="padding-right: 14px;padding-left: 16px;">
+												<input type="text" class="form-control" datepicker-popup 
+													ng-model="RR.ExpectedDate" is-open="opened"  datepicker-options="dateOptions" 
+													required close-text="Close" min-date="minDate"  max-date="maxDate" required/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="open1($event)" tabindex="6"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>	
+											</div>
+										</div>	
+										<!-- <input type="text" ng-model ="RR.ExpectedDate" class="form-control" required tabindex="5"> -->
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Qualification & Skill</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Qualification:</label>
+									<div class="col-md-8" style="margin-top:1.3%;">
+										<span name = "QualiName"  ng-repeat="quali in Qualification" >
+													{{ $index !=0 ? ' , '+ quali : quali }}
+										</span>	
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Skill:</label>
+									<div class="col-md-8" style="margin-top:1.3%;">
+										<span name="SkillName" ng-repeat="sk in Skill">
+											{{ $index !=0 ? ' , '+ sk : sk }}
+										</span> 
+									</div>
+								</div>
+								<hr class="col-md-12">
+							</div>
+							<div class="col-md-12">
+									<label for="Qualification & Skill" class="control-label"><u>Experience & Salary</u></label>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Expected Salary(P.A):</label>
+									<div class="col-md-8">
+										<div class="col-md-6" style="padding-left:0px;">
+											<input type="text" ng-model = "RR.minSalary" class="form-control" placeholder="min(P.A)" required tabindex="7">
+										</div>
+										<div class="col-md-6" style="padding-right:0px;">
+											<input type="text" ng-model = "RR.maxSalary" class="form-control" placeholder="max(P.A)" required tabindex="8">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4">Experience:</label>
+									<div class="col-md-8">
+										<label class="text-left col-md-2" style="margin-top:2%;">Min:</label>
+										<span class="text-left col-md-4" style="margin-top:2%;">{{ExperianceMin}}</span>
+										<label class="text-left col-md-2" style="margin-top:2%;">Max:</label>
+										<span class="text-left col-md-4" style="margin-top:2%;">{{ExperianceMAx}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="col-md-6">
+									<label for="Fullname" class="control-label col-md-4" >Request Status:</label>
+									<div class="col-md-8">
+										<select class="form-control" ng-model="RR.Status"
+										 ng-options = "obj.Status for obj in StatusListDtls " required tabindex="9">			
+											<option value="">Please Select Status</option>
+									</select>
+									</div>
+								</div>
+							<hr class="col-md-12">
+							</div>
+							
+					</div>
+				</div>
+			</div>
+	</form>
+</div>

@@ -1,0 +1,350 @@
+<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+<div>
+
+<form novalidate name="registerForm" method="POST" action="#" class="form-horizontal" role="form">
+			<div ng-show="searchbreadcrumb">
+				<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin: 0px;padding: 11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="JDList();">JobDescription</a></li>
+						<li class="active" ng-show="JDsearch">Search</li>
+						<span class="pull-right">
+							<button type="button"  class="btn btn-primary btn-sm" style="margin-top: -5px;" ng-show="AddJobDescriptionBtn" ng-click="AddJobBtn()" name="add" ng-click="AddCandiInfo()">
+							<span class="glyphicon glyphicon-plus"><strong>Add</strong></span></button>
+							<button type="button"  class="btn btn-primary btn-sm" ng-show="menuSearchBtn" style="margin-top: -5px;" ng-click="SearchJobBtn()" name="add" ng-click="AddCandiInfo()">
+							<span class="glyphicon glyphicon-search"><strong>Search</strong></span></button>
+						</span>
+					</ul>
+				</div>
+			</div>	
+			<div ng-show="Addbreadcrumb">
+				<div class="nav nav-bar nav-default" style="">		
+					<ul class="breadcrumb" style="margin:0px;padding: 11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="JDList();">JobDescription</a></li>
+						<li class="active">Add</li>
+						<span class="pull-right">
+							<button type="button"  class="btn btn-primary btn-sm" style="margin-top: -5px;" ng-click="SearchJobBtn()" name="add" ng-click="AddCandiInfo()">
+							<span class="glyphicon glyphicon-search"><strong>Search</strong></span></button>
+						</span>
+				    </ul>
+				</div>
+			</div>	
+			<div ng-show="Editbreadcrumb">
+				<div class="nav nav-bar nav-default" style="">		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="JDList();">JobDescription</a></li>
+						<li class="active">Edit</li>
+						<span class="pull-right">
+							<button type="button"  class="btn btn-primary btn-sm" style="margin-top: -5px;" ng-click="SearchJobBtn()" name="add" ng-click="AddCandiInfo()">
+							<span class="glyphicon glyphicon-search"><strong>Search</strong></span></button>
+							<button type="button"  class="btn btn-primary btn-sm" ng-show="AddJobDescriptionBtn" style="margin-top: -5px;" ng-click="AddJobBtn()" name="add" ng-click="AddCandiInfo()">
+							<span class="glyphicon glyphicon-plus"><strong>Add</strong></span></button>
+						</span>
+				   </ul>
+				</div>
+			</div>	
+				<div class="col-md-12">&nbsp;</div>
+			<div class="col-md-offset-2 col-md-8" ng-show="addjobpanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+					<div ng-show="EditJobLabel"><span class="label" style="font-size: 14px;color: black;"><strong>Edit Job Description</strong></span>
+							</div>
+							<div ng-show="AddJDSaveBtn">
+							<span class="label" style="font-size: 14px;color: black;"><strong>Add Job Description</strong></span>
+							<button type="Reset" class="btn btn-danger btn-sm pull-right" ng-click="cancelJDBtn()" required tabindex="9">
+							Cancel</button>
+							&nbsp;&nbsp;&nbsp;
+							<button type="button" class="btn btn-success btn-sm pull-right"  ng-disabled="registerForm.$error.required" ng-click="addJobDesc(jobDtls);" required tabindex="8">
+							Save</button>
+							</div>
+							<span><img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px" style="margin-top: -1.8%;">
+							<span class="label label-success pull-right" ng-show="insertmsg" style="margin-top: -1.8%;">{{ insertmsg }}</span>
+							<span class="label label-warning pull-right" style="margin-top: -1.8%;">{{errmsg}}</span>
+							
+						
+					</div>
+					<div class="panel-body">
+						<label for="Position & Experience" class="control-label"><u>Position & Experience</u></label>
+						<div>
+							<div class="col-md-8 col-md-offset-2">
+								<label for="exampleInputEmail1">Position:</label>
+								<input type="text" ng-model="jobDtls.Position" class="form-control" id="exampleInputPassword1" tabindex="1" autofocus required placeholder="Enter Position">
+							</div>
+							<div class="col-md-8 col-md-offset-2" style="margin-top:10px;">
+								<div class="col-md-12" style="padding-left: 0px;">
+								<label for="exampleInputPassword1">Experience:</label>
+								</div>
+								<div class="col-md-6" style="padding-left: 0px;">
+								<input type="text" ng-model="jobDtls.minexp" class="form-control" id="exampleInputPassword1" tabindex="2" required placeholder="min(mth)">
+								</div>
+								<div class="col-md-6" style="padding-right:0px;">
+								<input type="text" ng-model="jobDtls.maxexp" class="form-control" id="exampleInputPassword1" tabindex="3" required placeholder="max(mth)">
+								</div>
+							</div>
+						</div>
+						<hr class="col-md-12" style="padding-right:0px;">
+						<label for="Qualification & Skill" class="control-label col-md-12" style="text-align:left;margin-top: -2%;"><u>Qualification & Skill</u></label>
+						<div>
+							<div class="col-md-8 col-md-offset-2">
+								<label for="exampleInputEmail1">Qualification:</label>
+								<!-- <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" required tabindex="4"> -->
+								<multi-select   
+									output-model="jobDtls.QualiName" 
+									input-model="ArrQualificationList"    
+									button-label="QualiName"
+									helper-elements=""
+									item-label="QualiName"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="4"
+									required>
+								</multi-select>
+							</div>
+							<div class="col-md-8 col-md-offset-2" style="margin-top:10px;">
+								<label for="exampleInputPassword1">Skill:</label>
+								<multi-select   
+									output-model="jobDtls.SkillName" 
+									input-model="ArrSkillList"    
+									button-label="SkillName"
+									helper-elements=""
+									item-label="SkillName"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="5"
+									style="min-width:300px;"
+									required>
+								</multi-select>
+								<!-- <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required tabindex="5"> -->
+							</div>
+						</div>
+						<hr class="col-md-12" style="padding-right:0px;">
+						<label for="Role & Responsibility" class="control-label col-md-12" style="text-align:left;margin-top: -2%;"><u>Role & Responsibility</u></label>
+						<div>
+						
+							<div class="col-md-12">&nbsp;</div>
+							<div class="col-md-8 col-md-offset-2" style="padding-right:0px;">
+							
+								<label for="exampleInputEmail1">Role:</label>
+								<!-- <textarea class="form-control" ng-model="jobDtls.Role" required tabindex="6"></textarea> -->
+								<input type="text" class="form-control" ng-model="jobDtls.Role" data-toggle="modal" data-target="#myModal" ng-focus="#myModal" aria-hidden="true" required tabindex="6">
+								<div id="myModal" class="modal fade" role="dialog">
+								<div class="modal-dialog" style="width: 94%;">
+								<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Role</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container app">
+												<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll;" name="htmlcontent" ng-model="jobDtls.Role" ta-disabled='disabled' id="Role"></div>
+											</div>	
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8 col-md-offset-2" style="margin-top:10px;padding-right:0px;">
+								<label for="exampleInputPassword1">Responsibility:</label>
+								<!-- <textarea class="form-control" ng-model="jobDtls.Responsibility" required tabindex="7"></textarea> -->
+								<input type="text" class="form-control" ng-model="jobDtls.Responsibility" data-toggle="modal" data-target="#myModal1" ng-focus="#myModal" aria-hidden="true" required tabindex="7">
+								<div id="myModal1" class="modal fade" role="dialog">
+								<div class="modal-dialog" style="width: 94%;">
+								<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Responsibility</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container app">
+												<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll"; name="htmlcontent" ng-model="jobDtls.Responsibility" ta-disabled='disabled'></div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng-show="EditJDBtn">
+						<div class="col-md-12">&nbsp;</div>
+						<div class="form-group col-md-7 pull-right">
+							<button type="button" class="btn btn-success btn-sm" ng-show="UpdateJobDesacriptionBtn" ng-click="editJD(jobDtls);" ng-disabled="registerForm.$invalid" required tabindex="8">
+							Update</strong></span></button>
+							<button type="Reset" class="btn btn-danger btn-sm" ng-click="cancelJDBtn();" required tabindex="9">
+							Cancel</button>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------ -->
+			<div class="col-md-12" ng-show="searchjobpanel">
+				<div class="panel panel-default">
+					<div class="panel-heading col-md-12" id="panelheading">
+						<strong>Job Description List</strong>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<span class="label label-warning pull-right" ng-show="error">{{error}}</span>
+							<span class="label label-success pull-right" ng-show="insertmsg">{{ insertmsg }}</span>
+					</div>
+					<div class="panel-body">
+					 <div class="col-md-12">&nbsp;</div>
+					 <div ng-show="searchJDItem">
+					  <div class="col-md-10 col-md-offset-1">
+						 <div class="form-group col-md-6">
+							<label for="exampleInputName2" class="col-md-4 text-right" style="margin-top:1%;">Skill:</label>
+							<div class="col-md-8">
+							<multi-select   
+									output-model="searchjobDtls.SkillName" 
+									input-model="ArrSkillListDtls"    
+									button-label="SkillName"
+									helper-elements=""
+									item-label="SkillName"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="1">
+								</multi-select></div>
+						</div>	
+						<div class="form-group col-md-6">
+							<label for="exampleInputName2" class="col-md-4 text-right">Qualification:</label>
+							<div class="col-md-8"><multi-select   
+									output-model="searchjobDtls.QualiName" 
+									input-model="ArrQualificationListDtls"    
+									button-label="QualiName"
+									helper-elements=""
+									item-label="QualiName"
+									tick-property="ticked"
+									orientation="horizontal"
+									ticked="true"
+									tabindex="2">
+								</multi-select>
+							</div>
+						</div>
+					</div>	
+					<div class="col-md-10 col-md-offset-1">
+						<div class="form-group col-md-6">
+							<div class="col-md-4 text-right">
+								<label for="exampleInputPassword1" class="">Experience:</label>
+							</div>
+							<div class="col-md-8">
+								<input type="text" ng-model="searchjobDtls.minexp"  class="form-control input-sm" id="exampleInputPassword1" tabindex="3" placeholder="min(mth)">
+							</div>
+						</div>
+					
+						<div class="col-md-6">
+							<div class="col-md-12">
+								<input type="text" ng-model="searchjobDtls.maxexp" class="form-control input-sm" id="exampleInputPassword1" tabindex="4" placeholder="max(mth)">
+							</div>
+						</div>
+					</div>
+						<div class="form-group col-md-7 pull-right">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchJobDesc(searchjobDtls);" ng-disabled="CandijdReForm.$invalid" required tabindex="5">
+							Search</button>
+							<button type="Reset" class="btn btn-danger btn-sm" ng-click="clearJobDesc()" required tabindex="6">
+							Clear</button>
+						</div>
+					</div>	
+						<!-- <div class="col-md-12">&nbsp;</div> -->
+						<div class="col-md-12">
+							<div>
+								<scrollable-table>
+								<table class="table table-condensed table-striped table-responsive">
+									<thead>
+										<tr>
+											<th style="border:none" class="col-md-3 col-xs-12">Position</th>
+											<th style="border:none" class="col-md-2 col-xs-12">Qualification</th>
+											<th style="border:none" class="col-md-2 col-xs-12">Skill</th>
+											<th style="border:none" class="col-md-3 col-xs-12">Role & Resposibility</th>
+											<th style="border:none" class="col-md-2 col-xs-12">Exp Range(mth)</th>
+										</tr>				
+									</thead>						
+									<tbody>
+										<tr ng-repeat="obj in ArrJobDesc">
+											<td class="col-md-2 col-xs-12"><a href="" ng-click="editJDDtls(obj);">{{obj.Position}}</a></td>
+											<td class="col-md-2 col-xs-12">
+												<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+													{{ $index !=0 ? ' , '+ quali.QualiName : quali.QualiName }}
+												</span> 
+											</td>
+											<td class="col-md-2 col-xs-12">
+												<span name="SkillName" ng-repeat="skill in obj.TechSkillArr">
+												{{ $index !=0 ? ' , '+ skill.SkillName : skill.SkillName }}
+												</span> 
+											</td>
+											<td class="col-md-3 col-xs-12"><a href="" ng-mouseover="getRoleHtml(obj.Role);" ng-mouseleave="leaveRoleHtml();"><label>Role...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" ng-mouseover="getRoleHtml(obj.Responsibility);" ng-mouseleave="leaveRoleHtml();"><label>Responsibility...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal2,#myModal3" ng-focus="#myModal" ng-click="getModalData(obj.Role,obj.Responsibility);">Show</button></td>
+											<div id="myModal2" class="modal fade" role="dialog">
+												<div class="modal-dialog" style="width: 94%;">
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal">&times;</button>
+															<h4 class="modal-title">Role</h4>
+														</div>
+														<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+															<span ng-bind-html = "Role"></span>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="myModal3" class="modal fade" role="dialog" style="margin-top:318px;">
+												<div class="modal-dialog" style="width: 94%;">
+												<!-- Modal content-->
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal">&times;</button>
+															<h4 class="modal-title">Responsibility</h4>
+														</div>
+														<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+															<span ng-bind-html = "Responsibility"></span>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<td class="col-md-2 col-xs-12">{{obj.ExperianceMin}}<span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</span>{{obj.ExperianceMAx}}</td>
+										</tr>
+									</tbody>
+								</table>
+								</scrollable-table>
+							</div>
+							
+						</div>
+						
+				</div>
+				<div class="col-md-12" ng-show="RoleDiv" style="border-radius: 5px;margin-top:-22%;border:solid 3px solid;background-color:gray;width:70%;color:white;align:center;margin-left:15%;height:248px; max-height: 300px;overflow-y: scroll;">
+					<span ng-bind-html = "objRole"></span>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="col0md-12" id="main"></div> -->
+</form>
+</div>
+<!-- Field	Type	Collation	Attributes	Null	Default	Extra	Action
+	idReg	int(11)			No	None	auto_increment	 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Name	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmpId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DeptId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	DesignationId	int(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	MobNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	AltContactNo	bigint(11)			No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	EmailId	varchar(64)	utf8_unicode_ci		No	None		 Browse distinct values	 Change	 Drop	 Primary	 Unique	 Index	Fulltext
+	Address -->

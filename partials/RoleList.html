@@ -1,0 +1,159 @@
+
+<div class="container-fluid col-md-12">
+	<div class="container">
+		<div class="col-md-12">
+			<form novalidate name="Roleform" method="POST" action="#" class="form-horizontal" role="form">
+				<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+				<div class="col-md-8 col-md-offset-2">
+				
+					<div class="panel panel-default" ng-show="EditRolePanel">
+						<div class="panel-heading col-md-12">
+							<strong>Edit Role</strong></a>
+							
+							
+						
+							<button type="button" class="close" ng-click="closeRole()">&times;</button>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<label class="label label-success pull-right" style="font-size:12px;">{{ insertmsg2 }}</label>
+							<label class="label-warning pull-right" style="font-size:12px;">{{ errormsg2 }}</label>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-12">&nbsp;</div>
+							<div class="form-group col-xs-12">
+								<label for="Role" class="col-sm-4 col-xs-6 control-label text-right"style= "font-size:14px;"><strong>Role :</strong></label>
+								<div class="col-sm-8 col-xs-6">					
+									<input type="text" name = "Role" class="form-control input-sm" ng-model="editroleDtls.roledescription" required/>
+								</div>
+							</div>
+							<div class="col-md-offset-4 col-xs-offset-4 col-md-4 col-xs-4 text-center">
+								<button type="button" class="btn btn-default btn-block" ng-click="editRole(editroleDtls)"><strong>Save</strong></button>
+							</div>
+							
+						<div class="col-md-12">
+							<label class="label label-success pull-right" style="font-size:12px;">{{ insertmsg11 }}</label>
+							<label class="label-warning pull-right" style="font-size:12px;">{{ errormsg11 }}</label></div>
+						<tabset justified="false">
+							<tab heading ="User List" style="font-size: 12px;">
+								<div class="col-md-12" style="background-color:FFF">
+									<div>
+										<table class="table table-condensed table-responsive" style = "margin-top:-2px">
+											<thead>
+												<tr style="color:#54A4AE;">
+													<th class= "col-md-2">Users</th>
+													<!-- <th class= "col-md-2">Action</th> -->
+												</tr>
+											</thead>
+										</table>
+									</div>
+									<div class="scrollBar5" style="margin-top:-10px">
+										<table class="table table-condensed table-responsive" style = "margin-top:-5px">
+											<tbody>
+												<tr ng-repeat="user in AllRoleRelUserDtls">
+													<td class= "col-md-2">{{user.userId}}</td>
+													<!-- <td class= "col-md-2"><button type="button" ng-click="deActivateUser(user);" class="btn btn-default btn-xs">Delete</button></td> -->
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="col-md-12">&nbsp;</div>
+								</div>
+							</tab>
+							<tab heading = "Permissions" style="font-size: 12px;">
+								<div class="col-md-12" style="background-color:FFF">
+									<div>
+										<table class="table table-condensed table-responsive" style = "margin-top:-2px">
+											<thead>
+												<tr style="color:#54A4AE;">
+													<th class= "col-md-2">id</th>
+													<th class= "col-md-2">Elements</th>
+													<th class= "col-md-2">isPermitted</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+									<div class="scrollBar5" style="margin-top:-10px">
+										<table class="table table-condensed table-responsive" style = "margin-top:-5px">
+											<tbody>
+												<tr ng-repeat="element in rolePermissions">
+													<td class= "col-md-2">{{element.idElement}}</td>
+													<td class= "col-md-2">{{element.elementDesc}}</td>
+													<td class= "col-md-2"><input type="checkbox" ng-model="element.IsPermitted"></input></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="col-md-12">&nbsp;</div>
+									<div class="col-md-offset-2 col-xs-offset-4 col-md-8 col-xs-4 text-center">
+										<button type="button" class="btn btn-primary btn-sm" ng-click="saveRolePerm(rolePermissions)">Save</button>
+									</div>
+								</div>
+							</tab>
+						</tabset>
+					
+						</div>	
+					</div>
+				</div>
+				<div class="col-md-6 col-md-offset-3">
+				
+					<div class="panel panel-default" ng-show="AddRolePanel">
+						<div class="panel-heading col-md-12">
+							<strong>Add Role</strong></a>
+							<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+							<label class="label label-success pull-right" style="font-size:12px;">{{ insertmsg1 }}</label>
+							<label class="label-warning pull-right" style="font-size:12px;">{{ errormsg1 }}</label>
+							<button type="button" class="close" ng-click="closeRole()">&times;</button>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-12">&nbsp;</div>
+							<div class="form-group col-xs-12">
+								<label for="Role" class="col-sm-4 col-xs-6 control-label text-right"style= "font-size:14px;"><strong>Role :</strong></label>
+								<div class="col-sm-8 col-xs-6">					
+									<input type="text" name = "Role" class="form-control input-sm" ng-model="roleDtls.roledescription" required/>
+								</div>
+							</div>
+							<div class="col-md-offset-4 col-xs-offset-4 col-md-4 col-xs-4 text-center">
+								<button type="button" class="btn btn-default btn-block" ng-click="saveRole(roleDtls)"><strong>Save</strong></button>
+							</div>	
+						</div>	
+					</div>
+				</div>
+				<div class="col-md-8 col-md-offset-2" ng-show="panelRoleList">
+				
+					<div class="panel panel-default">
+						<div class="panel-heading col-md-12">
+							<span><strong >Role List</strong></span>
+							<div class="input-group pull-right col-md-2">
+								<span><img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px"></span>
+								<span class="input-group-btn pull-left">
+									
+									<button type="button" ng-hide="addBtn" ng-click="addRoleBtn();" class="btn btn-sm btn-primary">
+										<strong>Add New</strong>
+									</button>
+									
+								</span>	
+							</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-fixed">
+							  <thead>
+								<tr>
+									<th class="col-xs-8">
+											<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('roleDescription', true)">Role &#9650;</span>
+											<span ng-show="hName==false" ng-click="hName=true;order('roleDescription', false)">Role &#9660;  </span></a> 
+									</th>
+								</tr>
+							  </thead>
+							  <tbody>
+								<tr ng-repeat="role in AllRoleDtls">
+									<td class="col-xs-12"><a href="" ng-click="editRoleLink(role);">{{role.roleDescription}}</a></td>
+								</tr>
+							  </tbody>
+							</table>
+						</div>	
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>	
+</div>
+

@@ -1,0 +1,528 @@
+	<style>
+	.table-condensed > thead > tr > th {
+		padding: 0px;
+	}
+</style>
+	<div class="nav nav-bar nav-default" >		
+					<ul class="breadcrumb" style="margin:0px;padding:11px;">
+						<li><a href="#/JobDescription">Home</a></li>
+						<li><a href="" ng-click="showCandiList();">Candidates</a></li>
+						<li ng-show="CandiSearch">Search</li>
+						<li ng-show="CandiAdd">Add</li>
+						<li ng-show="CandiEdit">Edit</li>
+						<li ng-show="Candiview">View</li>
+						<span class="pull-right">
+						<button type="button" class="btn btn-primary btn-sm" name="add" ng-show="AddCandidateBtn" style="margin-top: -5%;" ng-click = "AddCandidate();">
+						<span class="glyphicon glyphicon-plus"><strong>Add</strong></span></button></a>
+						<button type="button" class="btn btn-primary btn-sm" ng-show="searchCadiBtn" style="margin-top: -5%;" ng-click="ShowSearchCandidate();">
+						<span class="glyphicon glyphicon-search"><strong>Search</strong></span></button>	
+						</span>
+				   </ul>
+	</div>
+		<!-- Candidate search -->
+<div class="col-md-12">&nbsp;</div>
+<div class="col-md-12">
+	<div class="panel panel-default" ng-show="searchcandidateform">
+		 <div class="panel-heading col-md-12" id="panelheading">
+					<strong>Candidate List</strong>
+					<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+					<span class ="label label-warning pull-right" ng-show ="errorMsg">{{errorMsg}}</span>
+					<span class="label-success pull-right">{{insertmsg}}</span>
+		 </div>
+		 <form  class="form-horizontal" role="form" name = "CandidateSearchForm" method="POST" >
+			<div class="panel-body">
+				<div class="col-md-12">&nbsp;</div>
+				<div ng-show="searchCandiItem">	
+				<div class="form-group">
+						<label for="CandidateName" class="control-label col-sm-2">Candidate Name</label>
+						<div class="col-sm-2">
+						  <input type="text" ng-model = "candidate.CandidateName" class="form-control col-sm-3" placeholder = "Enter Candidate Name">
+						</div>
+						<label for="Qualification" class="col-sm-1"> Qualification</label>
+						<div class="col-sm-2">
+						<multi-select   
+							output-model="candidate.QualiName" 
+							input-model="ArrQualificationListDtls"    
+							button-label="QualiName"
+							helper-elements=""
+							item-label="QualiName"
+							tick-property="ticked"
+							orientation="horizontal"
+							ticked="true">
+						</multi-select>
+						</div>
+						<label for="skill" class="control-label col-sm-2">Skill</label>
+						<div class="col-sm-2">
+							<multi-select   
+								output-model="candidate.SkillName" 
+								input-model="ArrSkillListDtls"    
+								button-label="SkillName"SSS
+								helper-elements=""
+								item-label="SkillName"
+								tick-property="ticked"
+								orientation="horizontal"
+								ticked="true">
+							</multi-select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="Experience" class="control-label col-sm-2">Total Experience</label>
+						<div class="col-sm-2">
+							<input type="text" name="Experience" ng-model = "candidate.TotalExp" class="form-control col-sm-3" placeholder="Enter Experience">
+						</div>		
+					
+						<label for="salary" class="control-label col-sm-1">Salary p.a.</label>
+						<div class="col-sm-2">
+							<input type="text" name="Salary" ng-model = "candidate.CurrentSalary" class="form-control col-sm-3" placeholder="Enter Salary">
+						</div>
+						<div class="col-sm-2 col-md-offset-2">
+							
+							<button type="submit" class="btn btn-success btn-sm" ng-click = "SearchCandidate(candidate);" >Search</button>
+							<button type="button" class=" btn btn-danger btn-sm" name="clear" ng-click="clearsearchCandiBtn();" id="clear"><b> Clear </b></button>
+						</div>
+					</div>
+			</div>
+			<div class="col-md-12">
+				<div>
+					<scrollable-table>
+						<table class="table table-striped table-condensed">
+							<thead>
+								<tr>
+									<th style="border:none" class="col-md-2">
+									<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('CandidateName', true)">Name &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('CandidateName', false)">Name &#9660;  </span></a> 
+									</th>
+									<th style="border:none" class="col-md-1">Qualification</th>
+									<th style="border:none" class="col-md-1">TechSkill</th>
+									<th style="border:none" class="col-md-1">Total Exp(m)</th>
+									<th style="border:none" class="col-md-1">Notice Per(m)</th>
+									<th style="border:none" class="col-md-3">Role & Responsibility</th>
+									<th style="border:none" class="col-md-1">Salary</th>
+									<th style="border:none" class="col-md-1">Designation</th>
+									<th style="border:none" class="col-md-1">
+										<a href=""><span ng-hide="hName==false" ng-click="hName=false;order('RegDate', true)">Reg Date &#9650;</span>
+										<span ng-show="hName==false" ng-click="hName=true;order('RegDate', false)">Reg Date &#9660;  </span></a> 
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat = "obj in ArrCandiSearch">
+									<td><a href ng-click ="candiview(obj)">{{obj.CandidateName}}</a></td>
+									<td>
+										<span name = "QualiName"  ng-repeat="quali in obj.QualiArr">
+										{{ $index !=0 ? ' , '+ quali : quali }}
+										</span> 
+									</td>
+							
+									<td>
+										<span name = "skillName"  ng-repeat="skill in obj.TechSkillArr">
+										{{ $index !=0 ? ' , '+ skill : skill }}
+										</span> 
+									</td>
+									<td>{{obj.TotalExp}}</td>
+									<td>{{obj.NoticePeriod}}</td>
+									<td style="padding-right: 0px;"><a href="" ng-mouseover="getRoleHtml(obj.Role);" ng-mouseleave="leaveRoleHtml();"><label>Role...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" ng-mouseover="getRoleHtml(obj.Responsibility);" ng-mouseleave="leaveRoleHtml();"><label>Responsibility...</label></a>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal2,#myModal3" ng-focus="#myModal" ng-click="getModalData(obj.Role,obj.Responsibility);">Show</button></td>
+									<div id="myModal2" class="modal fade" role="dialog">
+										<div class="modal-dialog" style="width: 94%;">
+										<!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">Role</h4>
+												</div>
+												<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+													<span ng-bind-html = "Role"></span>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="myModal3" class="modal fade" role="dialog" style="margin-top:318px;">
+										<div class="modal-dialog" style="width: 94%;">
+										<!-- Modal content-->
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">Responsibility</h4>
+												</div>
+												<div class="modal-body" style="height:180px;max-height: 180px;overflow-y: scroll;">
+													<span ng-bind-html = "Responsibility"></span>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<td>{{obj.CurrentSalary}}</td>
+									<td>{{obj.CurrentDesignation}}</td>
+									<td>{{obj.RegDate | date : 'dd-MM-yyyy'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</scrollable-table>
+				</div>
+				<div class="col-md-12" ng-show="RoleDiv" style="border-radius: 5px;margin-top:-22%;border:solid 3px solid;background-color:gray;width:70%;color:white;align:center;margin-left:15%;height:248px; max-height: 300px;overflow-y: scroll;">
+					<span ng-bind-html = "objRole"></span>
+				</div>
+				
+			</div>
+		</div>	
+	</form>
+	</div>
+</div>
+<form  name = "CandiForm" class="form-horizontal" role="form"  method="POST" uploader="uploader">	
+<div class="panel panel-default" ng-show="addcandidateform">
+	
+		<div class="panel-heading col-md-12" id="panelheading">
+			<span ng-show="AddCandiLabel"><strong>Add Candidate</strong></span>
+			<span ng-show="EditCandiLabel"><strong>Edit Candidate</strong></span>
+			<span class="pull-right">
+				<img src="Images/loading.gif" ng-show="loading" height="20px" width="20px">
+				<span class="label-success">{{insertmsg}}</span>
+				<span class="label-warning">{{Errmsg}}</span>
+				<button type = "button" class = "btn btn-success btn-sm" ng-click ="UploadResume(Candi)" ng-show="savecandidatebtn" ng-disabled = "CandiForm.$invalid || !Candi.QualiName || !Candi.Certification || !Candi.SkillName || !Candi.NonTechSkill">
+				Save</span>
+				<button type = "button" class = "btn btn-success btn-sm" ng-click ="UploadResume(Candi)" ng-show="Updatecandidatebtn" ng-disabled = "CandiForm.$invalid || !Candi.QualiName || !Candi.Certification || !Candi.SkillName || !Candi.NonTechSkill">
+				Update</span>
+				<button type="button" class="btn btn-danger btn-sm" ng-click="cancelCandiBtn();">
+				Cancel</span></button>	
+			</span>
+		</div>
+		<div class="panel-body scroll">
+			<div class="col-sm-12 col-sm-offset">
+					<div class="form-group form-group-sm">
+						<label for="CandidateName" class="control-label col-sm-2"><span style = "color:red;">*</span>Candidate Name :</label>
+						<div class="col-sm-4">
+							<input type="Text" name="CandidateName" class="form-control" ng-model = "Candi.CandidateName" placeholder = "Enter Candidate Name" ng-pattern = "/^[a-zA-Z\s]+$/" required >
+							<span style="color:red" ng-show =" CandiForm.CandidateName.$error.pattern">Enter Only Characters...!</span>
+						</div>
+						
+						<label for="file" class="control-label col-sm-2">Upload Resume:</label>
+							<div class="col-sm-4">
+								<input type="file" name="Upload_Resume" ng-model="Candi.Resume" nv-file-select="" uploader="uploader" 
+														onchange="angular.element(this).scope().fileChanged(this, 
+														angular.element(this).scope().$index);" class="form-control col-sm-4">
+							</div>
+					</div>
+						<label>{{Errmsg }}</label>	
+					<div class="form-group form-group-sm">
+						<label for="Date" class="col-sm-2 control-label"><span style = "color:red;">*</span>Registraion Date:</label>
+						<div class="col-sm-2">
+							<input type="Text" name="CandidateName" class="form-control" ng-model = "Candi.RegDate" disabled>
+						</div>	
+					</div>
+					<hr class = "hr">	
+					<label for = "current/lastjob" class="control-label"><u>Current/Last Job Information</u></label>
+					<div class="form-group">
+						<label for="company" class="control-label col-sm-2" >Company:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name="CompanyName" ng-model = "Candi.CurrentCompany" placeholder = "Company Name">
+						</div>
+						<label for="designation" class="control-label col-sm-2" >Designation:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name="Designation" ng-model = "Candi.CurrentDesignation" placeholder = "Designation">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="salary" class="control-label col-sm-2" >Salary(CTC p.a.):</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name="Salary" ng-model = "Candi.CurrentSalary" placeholder = "Salary" ng-keypress="NumberCheck($event);">
+							<!-- <span style="color:red" ng-show="CandiForm.Salary.$error.pattern">Enter Only Numbers...!</span> -->
+						</div>
+						<label for="NoticePeriod" class="control-label col-sm-2" >Notice Period(mth):</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name = "NoticePeriod" ng-model = "Candi.NoticePeriod" placeholder = "Notice Period" ng-keypress="NumberCheck($event);">
+							<!-- <span style="color:red" ng-show="CandiForm.NoticePeriod.$error.pattern">Enter Only Numbers...!</span> -->
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="role" class="control-label col-sm-2">Role:</label>
+						<div class="col-sm-4">
+							<!-- <textarea class=" form-control col-sm-4" name="Role" ng-model = "Candi.Role" placeholder = "Role Description"></textarea> -->
+							<input type="text" class="form-control col-sm-4" ng-model="Candi.Role" placeholder = "Role Description" data-toggle="modal" data-target="#myModal" ng-focus="#myModal" aria-hidden="true">
+								<div id="myModal" class="modal fade" role="dialog">
+								<div class="modal-dialog" style="width: 94%;">
+								<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Role</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container app">
+												<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll; name="htmlcontent" ng-model="Candi.Role" ta-disabled='disabled' id="Role"></div>
+											</div>	
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+									</div>
+								</div>
+						</div>
+						<label for="responsibility" class="control-label col-sm-2" >Responsibility:</label>
+						<div class="col-sm-4">
+							<!-- <textarea class=" form-control col-sm-4" name="Responsibilty" ng-model = "Candi.Responsibility" placeholder = "Responsibility"></textarea> -->
+							<input type="text" class="form-control col-sm-4" ng-model="Candi.Responsibility" placeholder = "Responsibility" data-toggle="modal" data-target="#myModal1" ng-focus="#myModal" aria-hidden="true">
+								<div id="myModal1" class="modal fade" role="dialog">
+								<div class="modal-dialog" style="width: 94%;">
+								<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Responsibility</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container app">
+												<div text-angular="text-angular" style="max-height: 334px;overflow-y: scroll; name="htmlcontent" ng-model="Candi.Responsibility" ta-disabled='disabled'></div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" ng-click="" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+									</div>
+								</div>
+						</div>
+					</div>
+						
+					<hr class = "hr">
+					<label for = "experience" class="control-label"><u>Experience</u></label>
+					<div class="form-group">
+						<label for="experience" class="control-label col-sm-2" >Total Exp(m):</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name="TotalExp" ng-model = "Candi.TotalExp" placeholder = "exp in months" ng-keypress="NumberCheck($event);">
+							<!--  <span style="color:red" ng-show="CandiForm.TotalExp.$error.pattern">Enter Only Numbers...!</span> -->
+						</div>
+						<label for="experience" class="control-label col-sm-2" >Relevant Exp(m):</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name = "RelevantExp" ng-model = "Candi.RelevantExp" placeholder = "exp in months" ng-keypress="NumberCheck($event);">
+							<!-- <span style="color:red" ng-show="CandiForm.RelevantExp.$error.pattern"> Enter Only Numbers...!</span> -->
+						</div>
+					</div>
+						
+					<hr class = "hr">
+					<label for = "qualification" class="control-label"><u>Qualification & Skills</u></label>
+					<div class="form-group">
+						<label for="qualification" class="control-label col-sm-2"><span style = "color:red;">*</span>Educational Qualification:</label>
+						<div class="col-sm-4">
+						<multi-select   
+							output-model="Candi.QualiName" 
+							input-model="ArrQualificationList"    
+							button-label="QualiName"
+							helper-elements=""
+							item-label="QualiName"
+							tick-property="ticked"
+							orientation="horizontal"
+							ticked="true"
+							required>
+						</multi-select>
+							<span style="color:red"> {{ QualificationErr }} </span>
+						</div>
+						<label for="skill" class="control-label col-sm-2" ><span style = "color:red;">*</span>Professional Certification:</label>
+						<div class="col-sm-4">
+							<multi-select   
+							output-model="Candi.Certification" 
+							input-model="ArrCertificationListDtls"    
+							button-label="Certification"
+							helper-elements=""
+							item-label="Certification"
+							tick-property="ticked"
+							orientation="horizontal"
+							ticked="true"
+							required>
+							</multi-select>
+							<span style="color:red"> {{ CertificationErr }} </span>
+						</div>
+					</div>	
+					
+					<div class="form-group">
+							<label for="skill" class="control-label col-sm-2" ><span style = "color:red;">*</span>Technical Skills:</label>
+							<div class="col-sm-4">
+								<multi-select   
+								output-model="Candi.SkillName" 
+								input-model="ArrSkillList"    
+								button-label="SkillName"
+								helper-elements=""
+								item-label="SkillName"
+								tick-property="ticked"
+								orientation="horizontal"
+								ticked="true"
+								required>
+								</multi-select>
+								<span style="color:red"> {{ SkillNameErr }} </span>
+							</div>
+							<label for="skill" class="control-label col-sm-2" ><span style = "color:red;">*</span>Nontechskill Skills:</label>
+							<div class="col-sm-4">
+								<multi-select   
+								output-model="Candi.NonTechSkill" 
+								input-model="ArrNonTechSkillListDtls"    
+								button-label="NonTechSkill"
+								helper-elements=""
+								item-label="NonTechSkill"
+								tick-property="ticked"
+								orientation="horizontal"
+								ticked="true"
+								required>
+								</multi-select>
+								<span style="color:red"> {{ NontechskillErr }} </span>
+							</div>	
+					</div>
+						
+					<hr class = "hr">
+					<label for = "contact" class="control-label"><u>Contact Information</u></label>
+					<div class="form-group">
+						<label for="mob" class="control-label col-sm-2"><span style = "color:red;">*</span>Mob No.:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name = "MobNo" ng-minlength = "10" ng-maxlength = "10" ng-model = "Candi.MobNo" placeholder = "Mobile No." ng-keypress="NumberCheck($event);" required>
+							<span style = "color:red" ng-show = "(CandiForm.MobNo.$error.minlength || CandiForm.MobNo.$error.maxlength) && CandiForm.MobNo.$dirty">Mobile no.should be 10 digits.</span>
+							<span style="color:red"> {{ MobNoErr }} </span>
+						</div>
+						<label for="skill" class="control-label col-sm-2">Alternate Contact No:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name = "AltContactNo" ng-minlength = "10" ng-maxlength = "10" ng-model = "Candi.AltContactNo" placeholder = "Alternate Contact No" ng-keypress="NumberCheck($event);">
+							<span style = "color:red" ng-show = "(CandiForm.AltContactNo.$error.minlength || CandiForm.AltContactNo.$error.maxlength) && CandiForm.AltContactNo.$dirty">Mobile no.should be 10 digits.</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="mob" class="control-label col-sm-2"><span style = "color:red;">*</span>Email-id:</label>
+						<div class="col-sm-4">
+							<input type="email" class="form-control" name = "EmailId" ng-model = "Candi.EmailId" placeholder = "Email-id" required>
+							<span style = "color:red" ng-show = "CandiForm.EmailId.$dirty && CandiForm.EmailId.$invalid">
+								<span ng-show = "CandiForm.EmailId.$error.email">Invalid Email Address</span>
+							</span>	
+							<span style="color:red"> {{ EmailIdErr }} </span>
+						</div>
+						<label for="address" class="control-label col-sm-2" ><span style = "color:red;">*</span>Address:</label>
+						<div class="col-sm-4">
+							<textarea name = "Address" class="form-control" ng-model = "Candi.Address" placeholder = "Enter Address" required></textarea>
+							<span style="color:red"> {{ AddressErr }} </span>
+						</div>
+					</div>
+			</div>
+		</div>
+	
+</div>
+</form>
+
+	<!-- ------------------------Candidate View ------------------------------->
+ 	
+<div class="panel panel-default" ng-show="viewcandidateform">
+		 <div class="panel-heading col-md-12" id="panelheading">
+					<strong>Candidate View</strong>
+					<button type="button" class="pull-right btn-sm btn btn-primary" name="Cancel" ng-click="cancelCandiBtn();">
+					Back</button>
+					<button type="button" class="pull-right btn btn-sm btn-primary" ng-show="UpdateCndidateBtn" ng-click = "EditCandidate(Candi)">
+					Edit</span></button>
+		 </div>
+		
+		<div class="panel-body scroll" style = "font-size: 12px;">
+			<div class="col-xs-12" style="height: 101%;" >
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="CandidateName" class="col-xs-2 text-right" >Candidate Name:</label>
+						<span class="col-xs-3">{{Candi.CandidateName}}</span>
+						
+						<label for="Address" class="col-xs-1 text-right" >Address:</label>
+						<span class="col-xs-4">{{Candi.Address}}</span>
+						
+						<strong><span class="col-xs-2"><span class="glyphicon glyphicon-paperclip"></span>View Resume</span></strong>
+					</div>
+					
+					<hr class="hr">
+					<div class="form-group">
+						<label for="Qualification" class="col-xs-2 text-right"><u>Qualification & Skill</u></label>
+					</div>
+					<div class="form-group">
+						<label for="EducationalQualification" class="col-xs-2 text-right" >Educational Qualification:</label>
+						<div class = "col-xs-2">
+							<table border="1" cellpadding="10px" style="border-collapse: collapse;">
+							<tr>
+<!-- 								<td ng-if = "!obj.QualiArr" ng-repeat = "obj in Candi.QualiName">&nbsp;{{ obj.QualiName. }}&nbsp;</td>  -->
+								<td ng-if = "!obj.QualiName" ng-repeat = "obj in Candi.QualiArr">&nbsp;{{ obj }}&nbsp;</td>
+								<td ng-if = "obj.QualiName" ng-repeat = "obj in Candi.QualiName">&nbsp;{{ obj.QualiName }}&nbsp;</td>
+							</tr>
+							</table> 	
+						</div>
+					
+						<label for="ProfessionalCertification" class="col-xs-2 text-right">Professional Certification:</label>
+						<div class = "col-xs-5">
+							<table border="1" cellpadding="10px" style="border-collapse: collapse;">
+							<tr>
+								<td ng-if = "!obj.Certification" ng-repeat = "obj in Candi.CertificationArr">&nbsp;{{ obj }}&nbsp;</td>
+								<td ng-if = "obj.Certification" ng-repeat = "obj in Candi.Certification">&nbsp;{{ obj.Certification }}&nbsp;</td>
+							</tr>
+							</table>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="TechSkill" class="col-xs-2 text-right" >Tech Skill:</label>
+						<div class = "col-xs-10">
+							<table border="1" cellpadding="10px" style="border-collapse: collapse;">
+							<tr>
+								<td ng-if = "!obj.SkillName" ng-repeat = "obj in Candi.TechSkillArr">&nbsp;{{ obj }}&nbsp;</td>
+								<td ng-if = "obj.SkillName" ng-repeat = "obj in Candi.SkillName">&nbsp;{{ obj.SkillName }}&nbsp;</td>
+							</tr>
+							</table>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="Non-TechSkill" class="col-xs-2 text-right" >Non-Tech Skill:</label>
+						<div class = "col-xs-10">
+							<table border="1" cellpadding="10px" style="border-collapse: collapse;">
+							<tr>
+								<td ng-if = "!obj.NonTechSkill" ng-repeat = "obj in Candi.NonTechSkillArr">&nbsp;{{ obj }}&nbsp;</td>
+								<td ng-if = "obj.NonTechSkill" ng-repeat = "obj in Candi.NonTechSkill">&nbsp;{{ obj.NonTechSkill }}&nbsp;</td>
+							</tr>
+							</table>
+						</div>
+					</div>
+					
+					<hr class="hr">
+					<div class="form-group">
+						<label for="TotalExp" class="col-xs-2 text-right" >Total Exp:</label>
+						<span class="col-xs-3">{{Candi.TotalExp}}</span>
+					
+						<label for="RelevantExp" class="col-xs-1 text-right" >Relevant Exp:</label>
+						<span class="col-xs-6">{{Candi.ReleventExp}}</span>
+					</div>
+					
+					<hr class="hr">
+					<div class="form-group">
+						<label for="Current/Last Job" class="col-xs-2 text-right" ><u>Current/Last Job</u></label>
+					</div>
+					<div class="form-group">
+						<label for="Company" class="col-xs-2 text-right" >Company:</label>
+						<span class="col-xs-3">{{Candi.CurrentCompany}}</span>
+					
+						<label for="Designation" class="col-xs-1 text-right" >Designation:</label>
+						<span class="col-xs-6">{{Candi.CurrentDesignation}}</span>
+					</div>
+					<div class="form-group">
+						<label for="Salary" class="col-xs-2 text-right" >Salary:</label>
+						<span class="col-xs-3">{{Candi.CurrentSalary}}</span>
+					
+						<label for="NoticePeriod" class="col-xs-1 text-right" >Notice Period:</label>
+						<span class="col-xs-6">{{Candi.NoticePeriod}}</span>
+					</div>
+					<div class="form-group">
+						<label for="Role" class="col-xs-2 text-right" >Role:</label>
+						<pre class="col-xs-10">{{Candi.Role}}</pre>
+					</div>
+					<div class="form-group">
+						<label for="Responsibilty" class="col-xs-2 text-right" >Responsibilty:</label>
+						<pre class="col-xs-10">{{Candi.Responsibility}}</pre>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+	

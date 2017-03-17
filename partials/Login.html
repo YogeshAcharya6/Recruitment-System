@@ -1,0 +1,35 @@
+<div class="container-fluid">
+	<div class="container">
+		<div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+			<form novalidate name="loginform" class="form-horizontal col-md-offset-2 col-md-8 col-xs-12 col-sm-12" role="form" style="margin-top: 45px;">
+				<div class="panel panel-default" ng-hide="hideLogin">
+					<div class="panel-heading col-md-12 col-sm-12 xol-xs-12">
+						<span class="glyphicon glyphicon-log-in">&nbsp;</span>
+						<strong>Login</strong></a>
+						<img src="Images/loading.gif" class="pull-right" ng-show="loading" height="20px" width="20px">
+						<span class="label label-warning pull-right">{{errmsg}}</span>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-12 col-sm-12 col-xs-12">&nbsp;</div>
+						<div class="form-group col-xs-12 col-md-12col-sm-12">
+							<label for="userName" class="col-md-4 col-sm-12 col-xs-12 control-label"style= "font-size:14px;"><strong>Username :</strong></label>
+							<div class="col-md-8 col-sm-12 col-xs-12" style="padding-right: 0px;">					
+								<input type="text" name = "userName" class="form-control input-sm" ng-model="Login.userId" required/>
+							</div>
+						</div>
+						<div class="form-group col-md-12 col-sm-12 col-xs-12">
+							<label for="password" class="col-md-4 col-sm-12 col-xs-12 control-label" style= "font-size:14px;"><strong>Password :</strong></label>
+							<div class="col-md-8 col-sm-12 col-xs-12" style="padding-right: 0px;">
+								<input type="password" name = "Password" class="form-control input-sm" ng-model="Login.userPassword" required/>
+							</div>
+						</div>	
+						<div id="loginhide" class="col-md-offset-4 col-xs-offset-2 col-sm-offset-2 col-md-4 col-xs-8 col-sm-8">
+							<button type="submit" class="btn btn-default btn-block" ng-click="chkLogin(Login)" ng-disabled="loginform.$invalid"><strong>LogIn</strong></button>
+						</div>	
+					</div>	
+				</div>
+			</form>
+		</div>
+	</div>	
+</div>
+
