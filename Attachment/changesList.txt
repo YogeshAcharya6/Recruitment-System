@@ -1,0 +1,22 @@
+
+
+
+----------- php -------------------
+vendor.php
+clients.php
+engmnt.php
+poinTSmysql.php
+
+
+--------- controllers --------------
+vendorCtrl.js
+engmntCtrl.js
+
+
+--------- partials ------------
+vendors.html
+clients.html
+engmntList.html
+
+
+
