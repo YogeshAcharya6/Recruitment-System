@@ -17,3 +17,4 @@ Using <a href="https://www.apachefriends.org/index.html">XAMPP</a> or <a href="h
 - Import `script/recruitment.sql` to this database.
 - Change the host, user, password in `data/db/connection.php` according to your phpmyadmin credentials.
 - Finally, access the project files throgh url `localhost/<local_dirctory_path>` in your browser.
+Thank You!!
